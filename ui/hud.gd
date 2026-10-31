@@ -254,8 +254,12 @@ func _refresh() -> void:
 	_bars["stamina"].value = world.player.stamina
 	_bars["stress"].value = s.stress
 	var st := PackedStringArray()
+	var counts := {}
 	for inj in s.injuries:
-		st.append(AfSurvival.INJURY_NAMES.get(inj["type"], inj["type"]) + (" (обраб.)" if inj["treated"] else ""))
+		var key: String = AfSurvival.INJURY_NAMES.get(inj["type"], inj["type"]) + (" (обраб.)" if inj["treated"] else "")
+		counts[key] = int(counts.get(key, 0)) + 1
+	for key in counts:
+		st.append(key + ("" if counts[key] == 1 else " ×%d" % counts[key]))
 	st.append_array(s.symptoms())
 	if s.body_temp < 35.5 or s.body_temp > 37.5:
 		st.append("%.1f °C" % s.body_temp)

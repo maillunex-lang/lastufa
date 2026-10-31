@@ -180,3 +180,18 @@ func test_code_pack_needs_release_key(t) -> void:
 	t.ok(str(res["error"]).contains("релизным"), "reason mentions release key: %s" % res["error"])
 	t.ok(FileAccess.file_exists(Bootstrap.BOOT_FILE), "boot file written")
 	t.eq(Bootstrap.code_version, AfPaths.game_version(), "nothing mounted in tests")
+
+
+func test_categories(t) -> void:
+	t.eq(AfManifest.category_of({"type": "REGION"}), "locations", "region -> locations")
+	t.eq(AfManifest.category_of({"type": "SYSTEM"}), "system", "system -> game updates")
+	t.eq(AfManifest.category_of({"type": "MOD", "category": "graphics"}), "graphics", "explicit category wins")
+	t.eq(AfManifest.category_of({"type": "MOD", "category": "nonsense", "files": [{"path": "data/items.json"}]}), "items", "unknown category -> inferred")
+	t.eq(AfManifest.category_of({"type": "MOD", "files": [{"path": "assets/textures/a.png"}, {"path": "assets/models/b.glb"}, {"path": "data/x.json"}]}), "graphics", "mostly assets -> graphics")
+	t.eq(AfManifest.category_of({"type": "MOD", "files": [{"path": "assets/sfx/a.ogg"}]}), "audio", "sounds -> audio")
+	t.eq(AfManifest.category_of({"type": "MOD", "files": [{"path": "data/zombies.json"}]}), "zombies", "zombies")
+	t.eq(AfManifest.category_of({"type": "MOD"}), "other", "empty -> other")
+	var out := []
+	OS.execute("python3", ["-c", "import sys,json; sys.path.insert(0,'%s'); import afpkg; print(afpkg.category_of({'type':'MOD','files':[{'path':'assets/a.png'},{'path':'assets/b.png'},{'path':'data/items.json'}]}))" % ProjectSettings.globalize_path("res://tools")], out, true)
+	if out.size() > 0 and str(out[0]).strip_edges() != "":
+		t.eq(str(out[0]).strip_edges(), "graphics", "python tool infers the same category")

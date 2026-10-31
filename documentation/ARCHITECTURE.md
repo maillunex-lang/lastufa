@@ -83,3 +83,13 @@
 ## Карта каталогов будущих модулей
 
 Каталоги создаются, когда в них появляется работающий код, а не заранее. Планируемые модули: `construction/` (база), `population/` (жители), `vehicles/`, `economy/`, `factions/`, `diplomacy/`, `politics/`, `military/`, `medicine/`, `science/`, `infrastructure/`, `quests/`, `dialogue/`, `events/`, `localization/`, `net/` (кооператив). Каждый — отдельная система сессии + свои таблицы + свой вид данных в реестре.
+
+## Карта
+
+Данные — OpenStreetMap (© участники OSM, ODbL): `tools/osm_fetch.sh` скачивает выгрузки через Overpass,
+`tools/osm_to_map.py` упрощает геометрию (Douglas-Peucker + shapely для валидности контуров) и пишет
+`data/core/data/map/*.json`: `border`, `district` (63), `region` (населённые пункты — узлы путешествий, со
+ссылками на соседей), `road`, `river`, `city_district` и `place` (Уфа). Рукотворные узлы и маршруты лежат в
+`tools/map_src/` и сливаются с данными OSM. Уровни отображения (`ui/map_view.gd`): республика → район →
+город → район города. Место без рукотворной локации получает детерминированную процедурную
+(`world/location_generator.gd`, id `gen:<place>`); сохраняется только её состояние.

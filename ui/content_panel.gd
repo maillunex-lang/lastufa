@@ -5,6 +5,7 @@ extends AfPanel
 ## resume, cancel, priority, speed, ETA), ZIP import and storage management.
 
 var _tab := "installed"
+var _cat := "all"   # category filter of the installed/catalog lists
 var _content: VBoxContainer
 var _status: Label
 var _dirty := false
@@ -65,6 +66,8 @@ func _process(delta: float) -> void:
 
 
 func _switch(tab: String) -> void:
+	if tab != _tab:
+		_cat = "all"
 	_tab = tab
 	if tab == "catalog" and Updates.catalog.is_empty() and not Updates.checking:
 		Updates.check_updates()
@@ -91,7 +94,15 @@ func _render_installed() -> void:
 	var rows := Packages.installed()
 	if rows.is_empty():
 		_content.add_child(AfUI.label("Дополнительные пакеты не установлены. Откройте «Каталог» или «Импорт ZIP».", 16, AfTheme.TEXT_DIM, true))
+	var groups := []
 	for row in rows:
+		groups.append([AfManifest.category_of(Packages.get_manifest(str(row["id"]))), row])
+	_category_bar(groups)
+	var cards := []
+	for g in groups:
+		var row: Dictionary = g[1]
+		if _cat != "all" and g[0] != _cat:
+			continue
 		var id := str(row["id"])
 		var m := Packages.get_manifest(id)
 		var sub := "%s · v%s · %s · %s%s" % [AfManifest.TYPE_LABELS.get(row["type"], row["type"]), row["version"], AfFs.human_size(int(row["size_bytes"])),
@@ -108,7 +119,8 @@ func _render_installed() -> void:
 			actions.append(["Откатить", func(): _report(Packages.rollback(id))])
 		actions.append(["История", func(): _show_history(id)])
 		actions.append(["Удалить", func(): _report(Packages.uninstall(id))])
-		_content.add_child(_pkg_card(str(row["name"]), sub, desc, actions))
+		cards.append([g[0], _pkg_card(str(row["name"]), sub, desc, actions)])
+	_emit_grouped(cards)
 	if not Registry.overrides.is_empty():
 		_content.add_child(AfUI.label("Переопределения контента (порядок загрузки решает, чья версия действует):", 16, AfTheme.ACCENT_SOFT))
 		for o in Registry.overrides.slice(0, 30):
@@ -130,7 +142,15 @@ func _render_catalog() -> void:
 		return
 	if Updates.catalog_error != "":
 		_content.add_child(AfUI.label("⚠ " + Updates.catalog_error + ". Для разработки: python3 tools/afpkg.py serve", 16, AfTheme.WARN, true))
+	var groups := []
 	for e in Updates.catalog:
+		groups.append([AfManifest.category_of(e), e])
+	_category_bar(groups)
+	var cards := []
+	for g in groups:
+		var e: Dictionary = g[1]
+		if _cat != "all" and g[0] != _cat:
+			continue
 		var state := str(e["state"])
 		var sub := "%s · v%s · %s%s" % [AfManifest.TYPE_LABELS.get(e.get("type", ""), e.get("type", "")), e["version"], AfFs.human_size(int(e.get("size", 0))),
 			"" if str(e.get("installed_version", "")) == "" else " · установлена v" + str(e["installed_version"])]
@@ -143,7 +163,48 @@ func _render_catalog() -> void:
 		var desc := str(e.get("description", ""))
 		if str(e.get("changelog", "")) != "":
 			desc += "\nИзменения: " + str(e["changelog"])
-		_content.add_child(_pkg_card(str(e.get("name", e["id"])), sub, desc, actions))
+		cards.append([g[0], _pkg_card(str(e.get("name", e["id"])), sub, desc, actions)])
+	_emit_grouped(cards)
+
+
+## Filter chips: «Все» + every category present, with counts.
+func _category_bar(groups: Array) -> void:
+	if groups.is_empty():
+		return
+	var counts := {}
+	for g in groups:
+		counts[g[0]] = int(counts.get(g[0], 0)) + 1
+	var flow := HFlowContainer.new()
+	flow.add_theme_constant_override("h_separation", 8)
+	flow.add_theme_constant_override("v_separation", 8)
+	var chips := [["all", "Все", groups.size()]]
+	for c in AfManifest.CATEGORIES:
+		if counts.has(c):
+			chips.append([c, AfManifest.CATEGORIES[c], counts[c]])
+	for ch in chips:
+		var b := AfUI.accent_button("%s · %d" % [ch[1], ch[2]], Callable()) if ch[0] == _cat else AfUI.button("%s · %d" % [ch[1], ch[2]])
+		b.custom_minimum_size = Vector2(0, 48)
+		var cid: String = ch[0]
+		b.pressed.connect(func():
+			_cat = cid
+			_render())
+		flow.add_child(b)
+	if not counts.has(_cat) and _cat != "all":
+		_cat = "all"
+	_content.add_child(flow)
+
+
+## Adds cards, with a header per category when showing everything.
+func _emit_grouped(cards: Array) -> void:
+	var order := AfManifest.CATEGORIES.keys()
+	cards.sort_custom(func(a, b): return order.find(a[0]) < order.find(b[0]))
+	var last := ""
+	for c in cards:
+		if _cat == "all" and c[0] != last:
+			last = c[0]
+			var h := AfUI.label(str(AfManifest.CATEGORIES.get(last, last)), 20, AfTheme.ACCENT)
+			_content.add_child(h)
+		_content.add_child(c[1])
 
 
 func _enqueue(entry: Dictionary) -> void:

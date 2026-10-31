@@ -5,9 +5,15 @@
 	"version": "1.0.0",
 	"min_game_version": "0.1.0",
 	"api_version": 1,
-	"systems": {"locations": "^1.0.0", "zombies": "^1.0.0"},
-	"dependencies": {"core": ">=0.1.0"},
+	"systems": {
+		"locations": "^1.0.0",
+		"zombies": "^1.0.0"
+	},
+	"dependencies": {
+		"core": ">=0.1.0"
+	},
 	"author": "Ashenfall Team",
 	"description": "Детальная локация у содового завода в Стерлитамаке, новый тип заражённых и задания района.",
-	"changelog": "Первый выпуск."
+	"changelog": "Первый выпуск.",
+	"category": "locations"
 }

@@ -8,6 +8,21 @@ const TYPE_LABELS := {
 	"AUDIO": "Аудио", "QUEST": "Задания", "LOCALIZATION": "Локализация", "MOD": "Мод", "DLC": "DLC",
 }
 const MANIFEST_NAMES := ["manifest.json", "mod.json"]
+
+## Catalog groups (order = display order). Authors set "category" in the
+## manifest; otherwise it is inferred from the package type and its files.
+const CATEGORIES := {
+	"system": "Обновления игры",
+	"locations": "Локации и регионы",
+	"items": "Предметы и оружие",
+	"zombies": "Заражённые",
+	"quests": "Задания и сюжет",
+	"gameplay": "Геймплей и баланс",
+	"graphics": "Графика",
+	"audio": "Звук и музыка",
+	"localization": "Языки",
+	"other": "Прочее",
+}
 const ID_REGEX := "^[a-z0-9][a-z0-9_.\\-]{2,63}$"
 
 ## Versions of game systems that packages may declare compatibility with.
@@ -29,6 +44,55 @@ const ALLOWED_ROOT_FILES := ["manifest.json", "mod.json", "preview.png", "README
 const FORBIDDEN_EXT := ["gd", "gdc", "gde", "cs", "so", "dll", "dylib", "dex", "jar", "apk", "aab", "exe", "sh", "bat", "py", "js", "wasm"]
 const MAX_FILES := 20000
 const MAX_PACKAGE_BYTES := 4 * 1024 * 1024 * 1024
+
+
+static func category_of(d: Dictionary) -> String:
+	var c := str(d.get("category", ""))
+	if CATEGORIES.has(c):
+		return c
+	match str(d.get("type", "")):
+		"SYSTEM", "ENGINE": return "system"
+		"REGION": return "locations"
+		"ASSET": return "graphics"
+		"AUDIO": return "audio"
+		"QUEST": return "quests"
+		"LOCALIZATION": return "localization"
+	var paths := PackedStringArray()
+	for f in d.get("files", []):
+		paths.append(str(f.get("path", "")).to_lower())
+	return infer_category(paths)
+
+
+## Guess from file names: data/location*.json → locations, data/items*.json → items…
+static func infer_category(paths: PackedStringArray) -> String:
+	var score := {}
+	for p in paths:
+		var c := ""
+		if p.begins_with("data/") and (p.contains("location") or p.contains("region") or p.contains("map")):
+			c = "locations"
+		elif p.begins_with("data/") and (p.contains("item") or p.contains("weapon") or p.contains("loot")):
+			c = "items"
+		elif p.begins_with("data/") and p.contains("zombie"):
+			c = "zombies"
+		elif p.begins_with("data/") and (p.contains("quest") or p.contains("story")):
+			c = "quests"
+		elif p.begins_with("assets/") and p.get_extension() in ["ogg", "wav", "mp3"]:
+			c = "audio"
+		elif p.begins_with("assets/"):
+			c = "graphics"
+		elif p.begins_with("locale/"):
+			c = "localization"
+		elif p.begins_with("scripts/") or p.begins_with("data/"):
+			c = "gameplay"
+		if c != "":
+			score[c] = int(score.get(c, 0)) + 1
+	var best := "other"
+	var n := 0
+	for c in score:
+		if int(score[c]) > n:
+			n = int(score[c])
+			best = c
+	return best
 
 
 ## Returns "" when the relative path is safe, else a reason.

@@ -68,8 +68,7 @@ static func card(margin: int = 14, bg: Color = AfTheme.PANEL_SOFT) -> PanelConta
 
 
 static func scroll(child: Control) -> ScrollContainer:
-	var s := ScrollContainer.new()
-	s.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var s := AfScroll.new()
 	s.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	s.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	child.size_flags_horizontal = Control.SIZE_EXPAND_FILL

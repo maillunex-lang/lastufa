@@ -23,6 +23,9 @@ const SCHEMAS := {
 	"climate": ["season", "base_temp", "weather"],
 	"rule": ["on", "actions"],
 	"border": ["points"],
+	"district": ["name", "center", "polygons"],
+	"city_district": ["name", "city", "polygons"],
+	"place": ["name", "type", "city", "lat", "lon"],
 }
 
 var _defs := {}            # kind -> { full_id -> def }
@@ -35,6 +38,23 @@ var active_packages: Array = []  # [{id, version, type, name}]
 
 func _ready() -> void:
 	reload()
+
+
+var _runtime := []  # [kind, def] generated at runtime (e.g. procedural locations)
+
+
+## Registers a generated definition; it survives reload().
+func add_runtime_def(kind: String, def: Dictionary) -> void:
+	_runtime = _runtime.filter(func(x): return not (x[0] == kind and x[1]["id"] == def["id"]))
+	_runtime.append([kind, def])
+	_put_runtime(kind, def)
+
+
+func _put_runtime(kind: String, def: Dictionary) -> void:
+	if not _defs.has(kind):
+		_defs[kind] = {}
+	_defs[kind][str(def["id"])] = def
+	_origin[kind + "|" + str(def["id"])] = str(def.get("_package", "core"))
 
 
 func reload() -> void:
@@ -51,6 +71,8 @@ func reload() -> void:
 			load_errors.append("%s: каталог пакета отсутствует" % row["id"])
 			continue
 		_load_package(str(row["id"]), root, str(row["version"]), str(row["type"]), str(row["name"]))
+	for r in _runtime:
+		_put_runtime(r[0], r[1])
 	for id in Packages.activation_errors:
 		load_errors.append("%s: %s" % [id, Packages.activation_errors[id]])
 	var total := 0

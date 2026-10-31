@@ -15,8 +15,12 @@ locale/             переводы (зарезервировано)
 Минимальный `mod.json`:
 
 ```json
-{"id": "my.mod", "name": "Мой мод", "type": "MOD", "version": "1.0.0", "min_game_version": "0.1.0", "api_version": 1}
+{"id": "my.mod", "name": "Мой мод", "type": "MOD", "category": "items", "version": "1.0.0", "min_game_version": "0.1.0", "api_version": 1}
 ```
+
+`category` — группа в каталоге: `system` (обновления игры), `locations`, `items`, `zombies`, `quests`,
+`gameplay`, `graphics`, `audio`, `localization`, `other`. Если не указана, определяется по типу пакета и
+по именам файлов (`data/items*.json` → предметы, `assets/*.png` → графика, `*.ogg` → звук…).
 
 Сборка с контрольными суммами и подписью: `python3 tools/afpkg.py build path/to/mod --out dist`.
 Мод без списка файлов тоже установится, но с пометкой «целостность не подтверждена».

@@ -72,3 +72,34 @@ func test_weather_changes_over_time(t) -> void:
 		seen[w.current] = true
 	t.ok(seen.size() >= 3, "several weather states over 10 days: %s" % str(seen.keys()))
 	t.ok(w.temperature > -40.0 and w.temperature < 45.0, "plausible temperature")
+
+
+func test_city_walk_and_districts(t) -> void:
+	var wm := Session.world_map
+	t.eq(wm.current_place, AfWorldMap.START_PLACE, "starts in the Chernikovka yard")
+	t.ok(wm.in_city("ufa"), "in Ufa")
+	t.eq(wm.district_of("core:ufa"), "core:go_ufa", "Ufa is its own city okrug")
+	var target := ""
+	for p in Registry.all("place"):
+		if p["type"] == "hospital":
+			target = str(p["id"])
+			break
+	var minutes := wm.walk_minutes(target)
+	t.ok(minutes > 1.0 and minutes < 600.0, "walking time plausible (%f)" % minutes)
+	var t0 := Clock.total_minutes
+	Session.player.survival.health = 100.0
+	wm.walk_to_place(target)
+	if not Session.player.survival.dead:
+		t.eq(wm.current_place, target, "arrived")
+		t.ok(Clock.total_minutes - t0 >= minutes - 1.0, "time passed")
+	t.ok(wm.neighbors("core:iglino").size() >= 3, "proximity links connect villages")
+	t.ok(wm.district_regions("core:r_iglinskiy").size() >= 5, "district has settlements")
+
+
+func test_leaving_city_clears_place(t) -> void:
+	var wm := Session.world_map
+	Session.player.inventory.add("water_bottle", 4, 1.0, 1.0, true)
+	Session.player.inventory.add("canned_meat", 4, 1.0, 1.0, true)
+	wm.travel("core:chishmy")
+	if not Session.player.survival.dead:
+		t.eq(wm.current_place, "", "no city place outside the city")

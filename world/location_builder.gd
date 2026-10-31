@@ -133,6 +133,8 @@ static func build(def: Dictionary) -> Dictionary:
 			[Vector3(1, 4, d + 2), Vector3(-w / 2 - 0.5, 2, 0)], [Vector3(1, 4, d + 2), Vector3(w / 2 + 0.5, 2, 0)]]:
 		var wall := _box(nav, side[0], side[1], mat(Color.BLACK), true)
 		wall.visible = false
+	var outer := _box(root, Vector3(w + 240, 0.1, d + 240), Vector3(0, -0.25, 0), mat(Color(def.get("ground_color", "#2b2c2a")).darkened(0.35)), false)
+	outer.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for p in def.get("patches", []):
 		var ps: Array = p["size"]
 		_box(root, Vector3(float(ps[0]), 0.02, float(ps[1])), v3(p["pos"], 0.01), mat(Color(p.get("color", "#333"))), false)

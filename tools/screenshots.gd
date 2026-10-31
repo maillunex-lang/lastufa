@@ -62,14 +62,44 @@ func _run() -> void:
 	var mp := AfMapPanel.new(false)
 	mp.world = world
 	world.ui_layer.add_child(mp)
-	await _shot("06_map", 15)
+	await _shot("06_map_place", 15)
+	mp._view.show_level("city", "ufa")
+	mp._view.select("city_district", "core:ufa_kalininskiy")
+	await _shot("06b_map_city", 10)
+	var rd := Session.world_map.district_of("core:iglino")
+	mp._view.show_level("district", rd)
+	mp._view.select("region", "core:iglino")
+	await _shot("06c_map_district", 10)
+	mp._view.show_level("republic")
+	mp._view.select("district", rd)
+	await _shot("06d_map_republic", 10)
 	mp.queue_free()
 	world.ui_layer.add_child(AfCharacterPanel.new())
 	await _shot("07_character", 10)
 	for c in world.ui_layer.get_children():
 		if c is AfPanel:
 			c.queue_free()
-	world.ui_layer.add_child(AfContentPanel.new())
+	Updates.catalog = [
+		{"id": "game.core", "name": "ASHENFALL: UFA — код игры", "type": "SYSTEM", "version": "0.1.9", "size": 368000, "state": "update", "installed_version": "0.1.2", "description": "Скрипты, сцены и данные ядра.", "changelog": "Многоуровневая карта"},
+		{"id": "region.sterlitamak", "name": "Регион: Стерлитамак — содовая промзона", "type": "REGION", "version": "1.0.0", "size": 4357, "state": "available", "description": "Детальная локация у содового завода."},
+		{"id": "hd.textures", "name": "HD-текстуры панелек", "type": "ASSET", "version": "1.2.0", "size": 48000000, "state": "available", "description": "Фасады хрущёвок и девятиэтажек."},
+		{"id": "example.echpochmak", "name": "Пример мода: Эчпочмак", "type": "MOD", "category": "items", "version": "1.0.0", "size": 1002, "state": "available", "description": "Новый предмет."},
+		{"id": "ambient.ufa", "name": "Звуки ночной Уфы", "type": "AUDIO", "version": "0.3.0", "size": 9000000, "state": "available", "description": "Ветер, сирены, лай собак."},
+	]
+	var cp := AfContentPanel.new()
+	world.ui_layer.add_child(cp)
+	cp._switch("catalog")
 	await _shot("08_content", 10)
+	for c in world.ui_layer.get_children():
+		if c is AfPanel:
+			c.queue_free()
+	Clock.start(13.0 * 60.0)
+	Session.weather.current = "clear"
+	for pid in ["hospital", "mall", "industrial"]:
+		var places := Registry.all("place").filter(func(p): return p["type"] == pid)
+		var loc := AfLocationGenerator.ensure_for_place(str(places[0]["id"]))
+		world.enter_location(loc)
+		world.cam.zoom = 34.0
+		await _shot("09_gen_" + pid, 50)
 	Session.end_session()
 	get_tree().quit()

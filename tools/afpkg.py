@@ -121,6 +121,43 @@ def verify(m: dict) -> str:
     return ""
 
 
+CATEGORIES = ["system", "locations", "items", "zombies", "quests", "gameplay", "graphics", "audio", "localization", "other"]
+
+
+def category_of(m: dict) -> str:
+    """Python mirror of AfManifest.category_of()."""
+    if m.get("category") in CATEGORIES:
+        return m["category"]
+    by_type = {"SYSTEM": "system", "ENGINE": "system", "REGION": "locations", "ASSET": "graphics", "AUDIO": "audio",
+               "QUEST": "quests", "LOCALIZATION": "localization"}
+    if m.get("type") in by_type:
+        return by_type[m["type"]]
+    score: dict = {}
+    for f in m.get("files", []):
+        p = f["path"].lower()
+        ext = p.rsplit(".", 1)[-1]
+        if p.startswith("data/") and any(k in p for k in ("location", "region", "map")):
+            c = "locations"
+        elif p.startswith("data/") and any(k in p for k in ("item", "weapon", "loot")):
+            c = "items"
+        elif p.startswith("data/") and "zombie" in p:
+            c = "zombies"
+        elif p.startswith("data/") and any(k in p for k in ("quest", "story")):
+            c = "quests"
+        elif p.startswith("assets/") and ext in ("ogg", "wav", "mp3"):
+            c = "audio"
+        elif p.startswith("assets/"):
+            c = "graphics"
+        elif p.startswith("locale/"):
+            c = "localization"
+        elif p.startswith(("scripts/", "data/")):
+            c = "gameplay"
+        else:
+            continue
+        score[c] = score.get(c, 0) + 1
+    return max(score, key=score.get) if score else "other"
+
+
 def _build_package(src: Path, out: Path, key: Path | None, version: str = "", extra: dict | None = None) -> dict | None:
     tmpl = json.loads((src / "manifest.json").read_text(encoding="utf-8"))
     if version:
@@ -152,6 +189,10 @@ def _build_package(src: Path, out: Path, key: Path | None, version: str = "", ex
     m.setdefault("min_game_version", "0.1.0")
     m["files"] = files
     m["size"] = sum(f["size"] for f in files)
+    if m.get("category") and m["category"] not in CATEGORIES:
+        print(f"unknown category {m['category']!r}; allowed: {', '.join(CATEGORIES)}", file=sys.stderr)
+        return None
+    m["category"] = category_of(m)
     m["released"] = m.get("released") or dt.date.today().isoformat()
     if key is not None:
         sign(m, key)
@@ -331,7 +372,7 @@ def _catalog_entry(out: Path, pid: str, version: str) -> dict | None:
         return None
     m = json.loads(mp.read_text(encoding="utf-8"))
     return {
-        "id": m["id"], "name": m["name"], "type": m["type"], "version": m["version"],
+        "id": m["id"], "name": m["name"], "type": m["type"], "version": m["version"], "category": category_of(m),
         "description": m.get("description", ""), "author": m.get("author", ""),
         "size": m.get("size", 0), "min_game_version": m.get("min_game_version", "0.1.0"),
         "dependencies": m.get("dependencies", {}), "changelog": m.get("changelog", ""),

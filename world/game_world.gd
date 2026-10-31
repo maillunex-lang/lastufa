@@ -32,6 +32,8 @@ func _ready() -> void:
 	Saves.before_save.connect(_persist_location)
 	Session.player.inventory.mark_availability()
 	var loc_id := Session.player.location_id
+	if loc_id.begins_with(AfLocationGenerator.PREFIX):
+		AfLocationGenerator.ensure_location(loc_id)
 	if loc_id != "" and Registry.has_def("location", loc_id):
 		enter_location(loc_id)
 	else:
@@ -72,6 +74,7 @@ func enter_location(loc_id: String) -> void:
 	mode = "location"
 	loc_def = Registry.get_def("location", loc_id)
 	Session.player.location_id = loc_id
+	_sync_current_place(loc_id)
 	var built := AfLocationBuilder.build(loc_def)
 	_location_root = built["root"]
 	add_child(_location_root)
@@ -113,6 +116,18 @@ func enter_location(loc_id: String) -> void:
 	Clock.release_pause("map")
 	Session.journal.add("location", "Локация: %s." % loc_def.get("name", loc_id))
 	EventBus.location_entered.emit(loc_id)
+
+
+## Keeps the map position in sync with the location the hero is in.
+func _sync_current_place(loc_id: String) -> void:
+	var wm := Session.world_map
+	if loc_def.has("place"):
+		wm.current_place = str(loc_def["place"])
+		return
+	for p in Registry.all("place"):
+		if p.has("location") and RegistryHelpers.full_id_for(str(p["location"]), str(p.get("_package", "core")), "location") == loc_id:
+			wm.current_place = str(p["id"])
+			return
 
 
 func _inside(p: Vector3) -> bool:

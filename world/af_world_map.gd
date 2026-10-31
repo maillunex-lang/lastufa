@@ -10,6 +10,11 @@ const ROAD_FACTOR := 1.2
 
 var regions := {}       # region id -> {intel, density, searched, visits}
 var current_region := "core:ufa"
+## Inside a city (e.g. Ufa): the place the hero stands at ("" = city entrance / not in a city).
+var current_place := ""
+const START_PLACE := "core:ufa_chernikovka_yard"
+const CITY_WALK_KMH := 4.0
+const CITY_ROUTE_FACTOR := 1.35
 var _edges := {}        # region id -> {neighbor id: km}
 var _rng := RandomNumberGenerator.new()
 
@@ -30,6 +35,21 @@ func build_graph() -> void:
 				_edges[b] = {}
 			_edges[a][b] = km
 			_edges[b][a] = km
+	# generated proximity links between neighbouring settlements (local roads)
+	for r in Registry.all("region"):
+		var a := str(r["id"])
+		for l in r.get("links", []):
+			var b := Registry.resolve("region", str(l))
+			if b == "" or b == a:
+				continue
+			var km := distance_km(a, b) * 1.25
+			if not _edges.has(a):
+				_edges[a] = {}
+			if not _edges.has(b):
+				_edges[b] = {}
+			if not _edges[a].has(b):
+				_edges[a][b] = km
+				_edges[b][a] = km
 
 
 func new_game() -> void:
@@ -39,6 +59,7 @@ func new_game() -> void:
 	for r in Registry.all("region"):
 		regions[r["id"]] = {"intel": 0, "density": float(r.get("danger", 0.3)), "searched": 0, "visits": 0}
 	current_region = "core:ufa"
+	current_place = START_PLACE
 	set_intel(current_region, 3)
 	regions[current_region]["visits"] = 1
 	for n in neighbors(current_region):
@@ -197,6 +218,7 @@ func travel(to_id: String) -> PackedStringArray:
 		report.append("Вы не дошли.")
 		return report
 	current_region = to_id
+	current_place = ""
 	regions[to_id]["visits"] = int(regions[to_id]["visits"]) + 1
 	set_intel(to_id, 3)
 	for n in neighbors(to_id):
@@ -281,6 +303,83 @@ func _encounter(dens: float) -> String:
 	return "Стычка с заражёнными (%s): −%.0f здоровья%s." % [how, dmg, extra]
 
 
+# --- districts and cities ---------------------------------------------------------
+
+func district_of(region_id: String) -> String:
+	return str(Registry.get_def("region", region_id).get("district", ""))
+
+
+func district_regions(district_id: String) -> Array:
+	return Registry.all("region").filter(func(r): return str(r.get("district", "")) == district_id)
+
+
+## Intel of a district = best intel of its settlements.
+func district_intel(district_id: String) -> int:
+	var best := 0
+	for r in district_regions(district_id):
+		best = maxi(best, intel(str(r["id"])))
+	return best
+
+
+func district_density(district_id: String) -> float:
+	var rs := district_regions(district_id)
+	if rs.is_empty():
+		return 0.0
+	var s := 0.0
+	for r in rs:
+		s += density(str(r["id"]))
+	return s / rs.size()
+
+
+func city_of_region(region_id: String) -> String:
+	return str(Registry.get_def("region", region_id).get("city", ""))
+
+
+func in_city(city: String) -> bool:
+	return city != "" and city_of_region(current_region) == city
+
+
+func place_pos(place_id: String) -> Vector2:
+	var p := Registry.get_def("place", place_id)
+	if p.is_empty():
+		var r := Registry.get_def("region", current_region)
+		return Vector2(float(r.get("lat", 0.0)), float(r.get("lon", 0.0)))
+	return Vector2(float(p["lat"]), float(p["lon"]))
+
+
+## Walking time inside the city from the current place (or city entrance).
+func walk_minutes(place_id: String) -> float:
+	var a := place_pos(current_place)
+	var b := place_pos(place_id)
+	var d := haversine_km(a.x, a.y, b.x, b.y) * CITY_ROUTE_FACTOR
+	return d / (CITY_WALK_KMH * maxf(0.3, Session.player.survival.move_multiplier())) * 60.0
+
+
+## Walks through the city to a place. Time passes, encounters depend on the
+## city's infection density. Returns report lines.
+func walk_to_place(place_id: String) -> PackedStringArray:
+	var report := PackedStringArray()
+	var p := Session.player
+	var minutes := walk_minutes(place_id)
+	var dens := density(current_region)
+	p.survival.exertion = 1.0
+	var left := minutes
+	while left > 0.0 and not p.survival.dead:
+		var step := minf(30.0, left)
+		Scheduler.fast_forward(step, step)
+		left -= step
+		if _rng.randf() < dens * 0.08 * step / 30.0:
+			report.append(_encounter(dens))
+	p.survival.exertion = 0.0
+	if p.survival.dead:
+		report.append("Вы не дошли.")
+		return report
+	current_place = place_id
+	var name := Registry.display_name("place", place_id)
+	report.insert(0, "Дорога до «%s»: %d мин." % [name, int(minutes)])
+	return report
+
+
 # --- persistence -------------------------------------------------------------
 
 func save_key() -> String:
@@ -300,6 +399,7 @@ func save_to_db(db: AfDatabase) -> void:
 		var r: Dictionary = regions[id]
 		db.exec("INSERT INTO regions VALUES (?, ?, ?, ?, ?)", [id, r["intel"], r["density"], r["searched"], r["visits"]])
 	db.exec("INSERT OR REPLACE INTO world_state VALUES ('current_region', ?)", [current_region])
+	db.exec("INSERT OR REPLACE INTO world_state VALUES ('current_place', ?)", [current_place])
 
 
 func load_from_db(db: AfDatabase) -> void:
@@ -312,6 +412,9 @@ func load_from_db(db: AfDatabase) -> void:
 	sync_with_registry()
 	var cur: Variant = db.scalar("SELECT value FROM world_state WHERE key = 'current_region'", [], "core:ufa")
 	current_region = str(cur) if Registry.has_def("region", str(cur)) else "core:ufa"
+	current_place = str(db.scalar("SELECT value FROM world_state WHERE key = 'current_place'", [], ""))
+	if current_place != "" and not Registry.has_def("place", current_place):
+		current_place = ""
 
 
 func active_region_ids() -> Array:
