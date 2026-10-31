@@ -13,6 +13,8 @@ extends Node
 ## (their content stays in the save, marked unavailable).
 
 signal slots_changed
+## Emitted before writing so live scene state (e.g. zombies) can be pushed into systems.
+signal before_save
 
 const SLOTS := ["autosave", "quicksave", "slot_1", "slot_2", "slot_3", "slot_4", "slot_5"]
 const KEEP_BACKUPS := 3
@@ -90,6 +92,7 @@ func save(slot: String, reason: String = "manual") -> bool:
 	if not AfDatabase.is_available():
 		EventBus.toast("Сохранение невозможно: SQLite недоступен", "danger")
 		return false
+	before_save.emit()
 	busy = true
 	var t0 := Time.get_ticks_msec()
 	var dir := slot_dir(slot)
