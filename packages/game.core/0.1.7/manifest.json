@@ -1,0 +1,26 @@
+{
+ "id": "game.core",
+ "name": "ASHENFALL: UFA — код игры",
+ "type": "SYSTEM",
+ "version": "0.1.7",
+ "engine": "4.5.1",
+ "min_apk_build": 2,
+ "min_game_version": "0.0.0",
+ "author": "Ashenfall Team",
+ "description": "Скрипты, сцены и данные ядра. Подключается при запуске игры поверх кода из APK.",
+ "changelog": "God game option: immortal hero, free and instant buildings, free item creation",
+ "api_version": 1,
+ "data_format": 1,
+ "files": [
+  {
+   "path": "code/game.pck",
+   "sha256": "14c724205f3a7db08c921993703ed19608fffc974c75d394486032b400cc79d0",
+   "size": 1630428
+  }
+ ],
+ "size": 1630428,
+ "category": "system",
+ "released": "2026-10-31",
+ "signature": "oJqw8PRmBTQgy01gd6zSLmiA1oLo/3OvG0QPO5ucsLmIUrOrNTfHn2lTpKbjA4jrqh1wb7SRWok1n0FbAKwGFx8Nl9cKe4Yfcl57GGN8xluI2BgpBhiEKpVBctBq6qA/kNC8855HvBn1aGm51/MnTgjMjXzg9v82ymwvtQFDcEuHPmAyoBWt113xJNBZruSfgYaWbrqThY375+Bx7JD/Yoji/BWJonyvi5+sB/F0ZvHAi43SfsL1uYwKe1tWGvb3zf9oBulkHPJM+FzuUwW4Tt5hub/wq9EX/B0ckyCG68E34PJbySck2N6wtuZMs99K1UfZpZG/Kjr7Ks6NmbJNYn+Zi0p30PIewFOvgdej1VWgfOi1PwldRVakNBxumYajFKRrnf4nqoY5+dxlcT4oT4r7mjHGr+BpWLPcfH1sC8JyDB+7i/o9nEeHzGtRFhMDCzAcEtoW2C+e8nJvhRtrBUFeQdfY8N+VnPyNwc4MH7gA1/15Glmi4/6WXQbnGmcu",
+ "key_id": "release_signing_private"
+}

@@ -1,0 +1,9 @@
+{
+	"kind": "loot_table",
+	"defs": [
+		{"id": "soda_lab", "rolls": [1, 3], "empty_chance": 0.05, "entries": [
+			{"item": "core:antiseptic", "weight": 4}, {"item": "core:electronics", "weight": 3}, {"item": "core:radio_parts", "weight": 2},
+			{"item": "core:field_notes", "weight": 1}, {"item": "core:antiviral_af7", "weight": 0.5}
+		]}
+	]
+}

@@ -1,0 +1,6 @@
+{
+	"kind": "item",
+	"defs": [
+		{"id": "echpochmak", "name": "Эчпочмак", "category": "food", "weight": 0.25, "stack": 6, "value": 5, "spoil_hours": 72, "use": {"hunger": 28, "stress": -6}}
+	]
+}

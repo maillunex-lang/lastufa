@@ -1,0 +1,55 @@
+{
+ "id": "region.sterlitamak",
+ "name": "Регион: Стерлитамак — содовая промзона",
+ "type": "REGION",
+ "version": "1.0.0",
+ "min_game_version": "0.1.0",
+ "api_version": 1,
+ "systems": {
+  "locations": "^1.0.0",
+  "zombies": "^1.0.0"
+ },
+ "dependencies": {
+  "core": ">=0.1.0"
+ },
+ "author": "Ashenfall Team",
+ "description": "Детальная локация у содового завода в Стерлитамаке, новый тип заражённых и задания района.",
+ "changelog": "Первый выпуск.",
+ "data_format": 1,
+ "files": [
+  {
+   "path": "README.md",
+   "sha256": "547506caac0e0297fb8350dc4a756f131e224157541592c948e1817ee7fbcfec",
+   "size": 316
+  },
+  {
+   "path": "data/content.json",
+   "sha256": "96c890677d6d873fb85a7814ffa08b4677c132141f3f9846d2d9de892d42ab10",
+   "size": 457
+  },
+  {
+   "path": "data/location.json",
+   "sha256": "b1c29d173e54ab3b574f24b853249dd73e7af2f4e8fa17cb907e2612170e4c8a",
+   "size": 2644
+  },
+  {
+   "path": "data/loot.json",
+   "sha256": "083ba9907e49b65abf6c0efdc690fb1ce73de0a97a9d55f7b3590746ae5de105",
+   "size": 342
+  },
+  {
+   "path": "data/region_patch.json",
+   "sha256": "ebab77dab960e65bcc626265c100472cfc42e2592e336a6f0c5047d9eb145144",
+   "size": 132
+  },
+  {
+   "path": "scripts/story.json",
+   "sha256": "30ada891418bd37803b3743b2ec7d93ad4202cf479185ea09ae09194cacf543c",
+   "size": 466
+  }
+ ],
+ "size": 4357,
+ "released": "2026-10-31",
+ "signature": "jcV0Fu0sw2OpRoXhvKbbQNvmRGIFJZ2iUra8NRjsZZSR+YF2bmkUHWEsrkOcH7cJXkUKFCqja3AWjlZY42/KKZ/44qY9YNLoJgd2YwRb+5b1n7uXJ+7HZJ0XQM2/0umriAfFQ9pBkwHGNtPgU9+toEYcQJWjo87EWEGlg1Guk42upCTYZ6SoxludJYM0p51XXtLYStvBHcpEIrHh8TufCH1cu6x7DJTWdrg/akABpXAUnctQkPCFgiApdSrdLXJcAwXuWW19RPr0dWlytjVtTvffPZd8quBb5A5u+3EyMil9vTNuPB1aayB8ZUl2TRD6g0hqIa6zSbCEw7dVmx/jNJHMJWiDY/mEJQpSmgsytjmt5GJ/KuWHkYZRyB5n1Xd8lz0Vlg1pqdkeZKLhneRMykW5XZGQpN8lQPbUwDLzhi7ObfncvEVq9QSI3NtEvJHQLxpsAs9cTatmdkOh6DKzksKDa6d4WyAbDKomms7Q/TTphOIl2vC2OcdcXASFF8yo",
+ "key_id": "release_signing_private"
+}

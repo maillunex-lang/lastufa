@@ -1,0 +1,26 @@
+{
+ "id": "game.core",
+ "name": "ASHENFALL: UFA — код игры",
+ "type": "SYSTEM",
+ "version": "0.1.3",
+ "engine": "4.5.1",
+ "min_apk_build": 2,
+ "min_game_version": "0.0.0",
+ "author": "Ashenfall Team",
+ "description": "Скрипты, сцены и данные ядра. Подключается при запуске игры поверх кода из APK.",
+ "changelog": "Multi-level map from OpenStreetMap, enterable city places, catalog categories, touch scrolling fix",
+ "api_version": 1,
+ "data_format": 1,
+ "files": [
+  {
+   "path": "code/game.pck",
+   "sha256": "4171ff8b2a7bb93c2ec9ff2cb4b9c2be8ced3c4c7dbd7dbe61e078925d34d083",
+   "size": 1024636
+  }
+ ],
+ "size": 1024636,
+ "category": "system",
+ "released": "2026-10-31",
+ "signature": "vUGJVNcOWTahchDrr7a+gl8Rj9PfNkLgg/svStulY7PkixBZf72kjdWDwgaLWcOWKs3CwhrBYTCcYAS4qJ/fgInipZUQ+nUHzf37n7l7w+D88DL/u+UhSjF5/vS0wqxxMCVWSS/ttRX7WXgF0btpZyCHaIjTbJHIULsp6dAAKbrDWYpzajyXUfeJNuMPtGA4GsBu+eznKWHQgd6yHd5ESxLi8RRK9VJakIHyi5PocZafCjr751IojPwKR+OJQnlXh5bA2vNA4ScGYAZbPgjGnSlHwg7wRnr8ACWTVZ91041fpFuRX8zSoXo2epzsgoY/QfpypZHEwuPtal8SUAMaYYSvL7Pdu/WGshq7WJnQqISBYXVsFleqUTEWeNRMvQTMIcf2QQ19yGaAhv6Q1p2Gdbv8+rHl2pcs3t/PXxLNdvkwvuz76be6e6wnIqPB492SUx5WSVtSBBX6hlJYULKRtr1eeOY3394nhBCTZG2g6+w2wsrn6wWuqI+Lw57+JTGW",
+ "key_id": "release_signing_private"
+}

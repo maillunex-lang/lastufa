@@ -1,0 +1,26 @@
+{
+ "id": "game.core",
+ "name": "ASHENFALL: UFA — код игры",
+ "type": "SYSTEM",
+ "version": "0.1.6",
+ "engine": "4.5.1",
+ "min_apk_build": 2,
+ "min_game_version": "0.0.0",
+ "author": "Ashenfall Team",
+ "description": "Скрипты, сцены и данные ядра. Подключается при запуске игры поверх кода из APK.",
+ "changelog": "Base in 3D: Kenney Survival Kit models (CC0), modules by level, scaffolding, fences, residents",
+ "api_version": 1,
+ "data_format": 1,
+ "files": [
+  {
+   "path": "code/game.pck",
+   "sha256": "5d99f2e6e2041534716410702b5cfe8084e85eb5acbf84586730045a26d15e71",
+   "size": 1626320
+  }
+ ],
+ "size": 1626320,
+ "category": "system",
+ "released": "2026-10-31",
+ "signature": "kVyqGtxST900Ha9PFG+izuFgW577mEX/jHzHXNG/Q9s6oe3dF2tarL7D9WtIHbSnuHNQUTLTR6IFjbKl2Gy/ZNCS58GcbDknHc/3DxjLf8uhRLSlykcmZVoP/GEuQ/rQwpT4UvN5aa1wvW6Wnr1R6g69JTb+lyWHgXuw5ZxT9V8UpLVLfJYjCocik1AZWYxwZTwv4iKduoxfYOnS2e3xgoUzarXCP5MW7SiwCTkJlNeHt43DhMt6ukRk7k3MxQCWK9YTMtnBIdBnDLxKXDAYBFgD47HMy8OI1bw46O9Gy/mq2c81ukgC61gvYc/zALsdeWFOR6rNIZeTRu8k8OLLEYDLeawTDuusnp9Ii48jAvICRvtVvH0lsrw26rFz5PCm7JxeKzZ/8gzpxrPhgH+wiSiyuenTepMJJyYmdA44ilEudjYVfe7tjbZoDjoVIOzf3sRiclxPIUkPWhN5nruahi63QL+b93WySStP75+7raa6LaULXz5yD6l0PnBEW7Iu",
+ "key_id": "release_signing_private"
+}

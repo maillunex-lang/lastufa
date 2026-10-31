@@ -1,0 +1,8 @@
+{
+	"kind": "rule",
+	"defs": [
+		{"id": "arrive_soda", "on": "location_entered", "if": [{"field": "location", "op": "==", "value": "region.sterlitamak:sterlitamak_soda"}], "once": true, "actions": [
+			{"type": "journal", "category": "story", "text": "Белая пыль на всём. Кальцинированная сода оседает на заражённых, как пепел. Местные называют их «обожжёнными»."}
+		]}
+	]
+}

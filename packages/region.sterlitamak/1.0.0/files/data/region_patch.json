@@ -1,0 +1,6 @@
+{
+	"kind": "region",
+	"defs": [
+		{"id": "core:sterlitamak", "patch": true, "location": "region.sterlitamak:sterlitamak_soda"}
+	]
+}

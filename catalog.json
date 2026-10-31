@@ -1,0 +1,79 @@
+{
+ "format": 1,
+ "channel": "stable",
+ "generated_at": "2026-10-31T14:43:50+00:00",
+ "packages": [
+  {
+   "id": "example.echpochmak",
+   "name": "Пример мода: Эчпочмак",
+   "type": "MOD",
+   "version": "1.0.0",
+   "category": "items",
+   "description": "Минимальный пример мода: новый предмет, правка таблицы лута и правило-скрипт.",
+   "author": "Modder",
+   "size": 1002,
+   "min_game_version": "0.1.0",
+   "dependencies": {},
+   "changelog": "",
+   "released": "2026-10-31",
+   "engine": "",
+   "min_apk_build": 0,
+   "manifest": "packages/example.echpochmak/1.0.0/manifest.json",
+   "files_base": "packages/example.echpochmak/1.0.0/files",
+   "zip": "packages/example.echpochmak/1.0.0/example.echpochmak-1.0.0.zip",
+   "versions": [
+    "1.0.0"
+   ]
+  },
+  {
+   "id": "game.core",
+   "name": "ASHENFALL: UFA — код игры",
+   "type": "SYSTEM",
+   "version": "0.1.7",
+   "category": "system",
+   "description": "Скрипты, сцены и данные ядра. Подключается при запуске игры поверх кода из APK.",
+   "author": "Ashenfall Team",
+   "size": 1630428,
+   "min_game_version": "0.0.0",
+   "dependencies": {},
+   "changelog": "God game option: immortal hero, free and instant buildings, free item creation",
+   "released": "2026-10-31",
+   "engine": "4.5.1",
+   "min_apk_build": 2,
+   "manifest": "packages/game.core/0.1.7/manifest.json",
+   "files_base": "packages/game.core/0.1.7/files",
+   "zip": "packages/game.core/0.1.7/game.core-0.1.7.zip",
+   "versions": [
+    "0.1.3",
+    "0.1.4",
+    "0.1.5",
+    "0.1.6",
+    "0.1.7"
+   ]
+  },
+  {
+   "id": "region.sterlitamak",
+   "name": "Регион: Стерлитамак — содовая промзона",
+   "type": "REGION",
+   "version": "1.0.0",
+   "category": "locations",
+   "description": "Детальная локация у содового завода в Стерлитамаке, новый тип заражённых и задания района.",
+   "author": "Ashenfall Team",
+   "size": 4357,
+   "min_game_version": "0.1.0",
+   "dependencies": {
+    "core": ">=0.1.0"
+   },
+   "changelog": "Первый выпуск.",
+   "released": "2026-10-31",
+   "engine": "",
+   "min_apk_build": 0,
+   "manifest": "packages/region.sterlitamak/1.0.0/manifest.json",
+   "files_base": "packages/region.sterlitamak/1.0.0/files",
+   "zip": "packages/region.sterlitamak/1.0.0/region.sterlitamak-1.0.0.zip",
+   "versions": [
+    "1.0.0"
+   ]
+  }
+ ]
+}

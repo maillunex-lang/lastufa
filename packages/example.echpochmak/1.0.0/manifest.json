@@ -1,0 +1,37 @@
+{
+ "id": "example.echpochmak",
+ "name": "Пример мода: Эчпочмак",
+ "type": "MOD",
+ "version": "1.0.0",
+ "min_game_version": "0.1.0",
+ "api_version": 1,
+ "author": "Modder",
+ "description": "Минимальный пример мода: новый предмет, правка таблицы лута и правило-скрипт.",
+ "data_format": 1,
+ "files": [
+  {
+   "path": "README.md",
+   "sha256": "f9f42f12b4b64742d8c45853ef58d89baf2c4f56623fd4923c6f3a176ba401b5",
+   "size": 307
+  },
+  {
+   "path": "data/items.json",
+   "sha256": "f888e119b46fa2e4ab88c09ce5bdb5addeb943f83691b47d3c64a3593088fe34",
+   "size": 202
+  },
+  {
+   "path": "data/loot_patch.json",
+   "sha256": "c1bdf573845a73ab2ee4c093e53cde6fc9500c9b0dc7d8a48f2d3a064bb64a48",
+   "size": 96
+  },
+  {
+   "path": "scripts/rules.json",
+   "sha256": "a0ac7f64ad60bd097f0567a7d93d11ada2ba12fab396b083a3050bd2f86f2feb",
+   "size": 397
+  }
+ ],
+ "size": 1002,
+ "released": "2026-10-31",
+ "signature": "kkqdmLV2wnasWKd9FxNo7Hr/Ir1rDTr712G4+M3OAl3uvkO2NXbnsSnG10coL2tjr3JeoUSKsFekfQi97Kbf1fLOnSxJNXJ93h0y1JhpFgemluXxNBtJ+R64UMhHvxXCBSekgIE7ObO+1swS72VsR9BVZ7nRLoWH8hkHtppfUZq/Olj6jAJ/NsKmDjGn8n1gEZfcgqhzxRu2a8j5o6ZSNVGrM+vs55n923D9RAIeJdtTVhoFPiAzo3JxqGqud4yl54RuaFVptCtsmAGEWV5nW9lfTaIOovLs+h4JjhJ+l0krPAoowl71kKIFtg1xKSjDOdawDpvjYVl8TERa1DLPmaE2ksATnUKpRzAgrE6cqB6egwKgw1oRaedXhUZHnVLCBjUJWKEPJkHzOx2ISkpQFQ/jwu5P16YNOWDiw0lkDBZ2xu8ISayh/8jNZ0qJqHN0g5MAphAz24V5tAR3WmQ8h0Y2cV3Ds/LtCYQigdusY2Dk4csHp5LKOklhvBIVuyCn",
+ "key_id": "release_signing_private"
+}

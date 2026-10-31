@@ -1,0 +1,26 @@
+{
+ "id": "game.core",
+ "name": "ASHENFALL: UFA — код игры",
+ "type": "SYSTEM",
+ "version": "0.1.5",
+ "engine": "4.5.1",
+ "min_apk_build": 2,
+ "min_game_version": "0.0.0",
+ "author": "Ashenfall Team",
+ "description": "Скрипты, сцены и данные ядра. Подключается при запуске игры поверх кода из APK.",
+ "changelog": "Base and survivors: settlement, buildings, autonomous residents, events and decisions",
+ "api_version": 1,
+ "data_format": 1,
+ "files": [
+  {
+   "path": "code/game.pck",
+   "sha256": "53f2dfbdbcb819d7bc3e0d59c4b38c7273c8bb84996d5b7b175bca040de3ab83",
+   "size": 1115732
+  }
+ ],
+ "size": 1115732,
+ "category": "system",
+ "released": "2026-10-31",
+ "signature": "qxHfOIOWdnMO0O1MDw5w/QVj9hKxNq3g7WNTlWgQSV8sIz9r9ddY7QGIou39ogESN8LIP8WcvpXaSgVrCB1dvuwq4Y2Jx7mpev73/L4EGT+zTczKyof8zbNDzHhRW4ql4f/jFsljzBvPN928Ne+N39luHimUXLXVxdHEkuKx1BgHaH2g+iwYkWq1q1wzxAXeg9nxfL8Dr+uTaDVBXzsk6I5k23mX9lDWkplSrSgp0xicecL03Cjp81T+FsASoFkXQF585Sk5qWEahokHqEZvUoj6IGDUvS6LXpThBMzpAewgcbKTq5qzgzr2AB/ezB3wiTLh5wvSPU2R5X3iWyu/MKhZ/x2te16CBhZhBU9OYFUcc5Bm3vJQDM1FmVjUGgzekXlYCx1AqZ48SkgGOQRm7mR7Q/Zw+xYPGnsuf9LI28dFSpG4wj8LXJefekxnZKWfKHVnwTk4XxkWf1lfu5zz0MeQBGyZmTBJo2tZokx98WuCDyWHf+9lwLDBYwrHZqJY",
+ "key_id": "release_signing_private"
+}
