@@ -127,6 +127,31 @@ func _run() -> void:
 	for c in world.ui_layer.get_children():
 		if c is AfDialog:
 			c.queue_free()
+	Session.events.pending.clear()
+	# --- base in 3D
+	var mods := {"shelter": 2, "storage": 2, "workshop": 2, "infirmary": 1, "kitchen": 1, "garden": 2, "water": 2, "generator": 1, "radio": 1, "defenses": 2}
+	for m in mods:
+		Session.base.modules["core:" + m] = {"level": mods[m], "condition": 1.0 if m != "water" else 0.4}
+	Session.base.storage.add("fuel_can", 3, 1.0, 1.0, true)
+	Session.base.queue = [{"module": "core:storage", "level": 3, "done": 5.0, "need": 12.0}]
+	Session.base.modules.erase("core:storage")
+	var jobs := ["build", "garden", "kitchen", "guard", "infirmary"]
+	var ppl := Session.survivors.at_base()
+	for i in ppl.size():
+		ppl[i]["job"] = jobs[i % jobs.size()]
+	Clock.start(12.0 * 60.0)
+	Session.weather.current = "clear"
+	world.enter_location("core:ufa_chernikovka")
+	world.player.global_position = world.compound.center + Vector3(0, 0, world.compound.radius + 3.0)
+	world.cam.global_position = world.compound.center
+	world.cam.target = null
+	world.cam.zoom = 30.0
+	world.fx.update_now()
+	await _shot("14_base_3d", 60)
+	world.cam.global_position = world.compound.slots["kitchen"]
+	world.cam.zoom = 15.0
+	await _shot("15_base_3d_close", 40)
+	world.cam.target = world.player
 	Clock.start(13.0 * 60.0)
 	Session.weather.current = "clear"
 	for pid in ["hospital", "mall", "industrial"]:

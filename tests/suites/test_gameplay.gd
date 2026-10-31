@@ -180,3 +180,33 @@ func _clear_zombies() -> void:
 	for z in world.zm.zombies.duplicate():
 		world.zm.zombies.erase(z)
 		world.zm._release(z)
+
+
+func test_base_compound_in_3d(t) -> void:
+	var b := Session.base
+	b.found(AfWorldMap.START_PLACE, "core:ufa")
+	Session.events.resolve(Session.events.pending[0], 0)
+	b.modules["core:shelter"] = {"level": 2, "condition": 1.0}
+	b.modules["core:workshop"] = {"level": 1, "condition": 0.3}
+	b.modules["core:defenses"] = {"level": 1, "condition": 1.0}
+	b.queue = [{"module": "core:kitchen", "level": 1, "done": 1.0, "need": 5.0}]
+	world.enter_location("core:ufa_chernikovka")
+	await _frames(t, 3)
+	t.ok(world.compound != null, "compound built in the base location")
+	var mods := world.compound.spots.map(func(s): return s["module"])
+	t.ok(mods.has("shelter") and mods.has("workshop") and mods.has("kitchen"), "built and queued modules shown: %s" % str(mods))
+	t.ok(world.compound.slots.size() >= 8, "enough free slots in the yard (%d)" % world.compound.slots.size())
+	var inside := world.zm.zombies.filter(func(z): return Vector2(z.global_position.x, z.global_position.z).distance_to(Vector2(world.compound.center.x, world.compound.center.z)) < world.compound.radius)
+	t.eq(inside.size(), 0, "no infected inside the fence")
+	await _frames(t, 20)
+	t.eq(world.compound.npcs().size(), 1, "resident walks around")
+	world.player.global_position = world.compound.slots["shelter"] + Vector3(0, 0, 1)
+	world.player._update_interact_target()
+	t.eq(str(world.player.interact_target.get("kind", "")), "base_module", "module is interactable")
+	world.enter_location("core:ufa_chernikovka")
+	await _frames(t, 2)
+	t.ok(world.compound != null, "rebuilt on re-entry")
+	var gen := AfLocationGenerator.ensure_for_place(Registry.all("place").filter(func(p): return p["type"] == "hospital")[0]["id"])
+	world.enter_location(gen)
+	await _frames(t, 2)
+	t.ok(world.compound == null, "no compound in other locations")

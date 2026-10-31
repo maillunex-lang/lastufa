@@ -13,6 +13,7 @@ var fx: AfEnvironmentFx
 var hud: AfHud
 var ui_layer: CanvasLayer
 var containers: Array = []
+var compound: AfBaseCompound
 var exits: Array = []
 var _location_root: Node3D
 var _tracers: Array[MeshInstance3D] = []
@@ -98,6 +99,7 @@ func enter_location(loc_id: String) -> void:
 	player.global_position = spawn
 	zm.player = player
 	zm.populate(loc_def)
+	_setup_compound(loc_id)
 	var nav: NavigationRegion3D = built["nav"]
 	nav.bake_finished.connect(func(): zm.nav_ready = true)
 	nav.bake_navigation_mesh(true)
@@ -132,6 +134,25 @@ func _sync_current_place(loc_id: String) -> void:
 			return
 
 
+## The settlement in 3D when this location is where the base stands.
+func _setup_compound(loc_id: String) -> void:
+	var b := Session.base
+	if not b.exists or b.place_id == "":
+		return
+	if AfLocationGenerator.ensure_for_place(b.place_id) != loc_id:
+		return
+	compound = AfBaseCompound.new()
+	compound.name = "BaseCompound"
+	_location_root.add_child(compound)
+	compound.setup(self, loc_def)
+	# nothing lurks inside the fence; strong defenses keep more of the yard clear
+	var clear_r: float = compound.radius + 4.0 + b.defense() * 0.15
+	for z in zm.zombies.duplicate():
+		if Vector2(z.global_position.x, z.global_position.z).distance_to(Vector2(compound.center.x, compound.center.z)) < clear_r:
+			zm.zombies.erase(z)
+			zm._release(z)
+
+
 func _inside(p: Vector3) -> bool:
 	var s: Array = loc_def["size"]
 	return absf(p.x) < float(s[0]) / 2.0 - 1.0 and absf(p.z) < float(s[1]) / 2.0 - 1.0
@@ -160,6 +181,7 @@ func _clear_mode() -> void:
 		if n and is_instance_valid(n):
 			n.queue_free()
 	zm = null
+	compound = null
 	player = null
 	cam = null
 	hud = null
@@ -220,6 +242,15 @@ func show_map_mode() -> void:
 
 func on_interact(target: Dictionary) -> void:
 	match str(target.get("kind", "")):
+		"base_module":
+			var panel := AfBasePanel.new()
+			panel._tab = "build"
+			ui_layer.add_child(panel)
+		"resident":
+			var bp := AfBasePanel.new()
+			bp._tab = "people"
+			ui_layer.add_child(bp)
+			bp._person_dialog(int(target["sid"]))
 		"container":
 			var c: Node3D = target["node"]
 			var cdef: Dictionary = c.get_meta("container")

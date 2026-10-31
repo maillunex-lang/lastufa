@@ -398,6 +398,14 @@ func _update_interact_target() -> void:
 	var corpse := zm.nearest_corpse(global_position, minf(bd, 2.0))
 	if corpse:
 		best = {"kind": "corpse", "node": corpse, "text": "Обыскать тело: " + str(corpse.def.get("name", ""))}
+	if world.compound:
+		for s in world.compound.spots:
+			if global_position.distance_to(s["node"].global_position) < 3.2:
+				best = {"kind": "base_module", "node": s["node"], "text": "Убежище: %s (ур. %d)" % [Registry.display_name("base_module", s["module"]), Session.base.level(s["module"])]}
+		for n in world.compound.npcs():
+			if global_position.distance_to(n.global_position) < 2.0:
+				var p := Session.survivors.find(n.sid)
+				best = {"kind": "resident", "node": n, "sid": n.sid, "text": "Поговорить: %s" % p.get("name", "")}
 	for e in world.exits:
 		var ed: Dictionary = e.get_meta("exit")
 		if global_position.distance_to(e.global_position) < float(ed.get("radius", 3.0)):
