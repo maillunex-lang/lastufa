@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: 4.5.1
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        run: |
+          curl -sSL -o godot.zip https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          unzip -q godot.zip -d "$HOME/godot"
+          echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Python deps (package tool)
+        run: pip install cryptography
+
+      - name: Compile all scripts
+        run: |
+          $GODOT --headless --import >/dev/null 2>&1 || true
+          $GODOT --headless -s res://tools/check_scripts.gd
+
+      - name: Tests
+        run: tests/run_tests.sh
+
+      - name: Install export templates
+        run: |
+          curl -sSL -o tpl.tpz https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          unzip -q tpl.tpz -d tpl
+          mv tpl/templates/* "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+
+      - name: Android SDK packages
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0" "platforms;android-35" > /dev/null
+
+      - name: Build debug APK
+        run: ANDROID_SDK="$ANDROID_HOME" tools/build_apk.sh debug
+
+      - name: Build sample content packages
+        run: |
+          python3 tools/afpkg.py build content_src/region_sterlitamak --out dist
+          python3 tools/afpkg.py build content_src/example_mod --out dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ashenfall-ufa-debug-apk
+          path: build/ashenfall_ufa.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: content-dist
+          path: dist/

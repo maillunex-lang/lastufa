@@ -295,7 +295,10 @@ func _start_more() -> void:
 		blocked_reason = ""
 		return
 	if not AfNetworkState.downloads_allowed(bool(Settings.get_value("content/wifi_only"))):
-		blocked_reason = "ожидание Wi-Fi (включено «только Wi-Fi»)"
+		if AfNetworkState.connection_kind() == "unknown":
+			blocked_reason = "тип сети не определён — отключите «только Wi-Fi», чтобы скачать"
+		else:
+			blocked_reason = "ожидание Wi-Fi (включено «только Wi-Fi»)"
 		return
 	blocked_reason = ""
 	var now := int(Time.get_unix_time_from_system())
