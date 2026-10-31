@@ -125,6 +125,8 @@ func build_problem(id: String) -> String:
 		return "уже строится"
 	if level(id) >= max_level(id):
 		return "максимальный уровень"
+	if Session.config.god_mode:
+		return ""
 	var ld := level_def(id, level(id) + 1)
 	for item in ld.get("cost", {}):
 		if storage.count(item) < int(ld["cost"][item]):
@@ -139,6 +141,11 @@ func order_build(id: String) -> String:
 	var full := Registry.resolve("base_module", id)
 	var lvl := level(full) + 1
 	var ld := level_def(full, lvl)
+	if Session.config.god_mode:
+		# god game: no materials, no builders, done at once
+		_finish_build({"module": full, "level": lvl, "done": 0.0, "need": 0.0}, false)
+		changed.emit()
+		return ""
 	for item in ld.get("cost", {}):
 		storage.remove_item(item, int(ld["cost"][item]))
 	queue.append({"module": full, "level": lvl, "done": 0.0, "need": float(ld.get("build_hours", 6))})
@@ -155,7 +162,7 @@ func repair_cost(id: String) -> Dictionary:
 
 
 func repair(id: String) -> String:
-	var cost := repair_cost(id)
+	var cost := {} if Session.config.god_mode else repair_cost(id)
 	for item in cost:
 		if storage.count(item) < int(cost[item]):
 			return "не хватает: " + Registry.display_name("item", item)
@@ -418,6 +425,14 @@ func _add_fraction(item: String, amount: float) -> void:
 func _craft(id: String, pr: float) -> void:
 	if level(id) == 0:
 		return
+	if Session.config.god_mode:
+		# god game: recipes fill up to their target stock without inputs or workers
+		for r in Registry.all("recipe"):
+			if Registry.resolve("base_module", str(r["module"])) == Registry.resolve("base_module", id) and level(id) >= int(r.get("min_level", 1)):
+				var missing := int(recipe_targets.get(str(r["id"]), 0)) - storage.count(str(r["output"]))
+				if missing > 0:
+					storage.add(str(r["output"]), missing, 1.0, 1.0, true)
+		return
 	var staff := staff_of(id)
 	if staff.is_empty():
 		return
@@ -471,8 +486,9 @@ func _maintain(module_full: String, work: float) -> void:
 				return
 
 
-func _finish_build(q: Dictionary) -> void:
-	queue.pop_front()
+func _finish_build(q: Dictionary, from_queue: bool = true) -> void:
+	if from_queue:
+		queue.pop_front()
 	var id := str(q["module"])
 	modules[id] = {"level": int(q["level"]), "condition": 1.0}
 	var txt := "Достроено: %s (уровень %d)." % [Registry.display_name("base_module", id), int(q["level"])]

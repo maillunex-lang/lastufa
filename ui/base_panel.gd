@@ -235,7 +235,10 @@ func _buildings() -> void:
 			var cost := PackedStringArray()
 			for item in next.get("cost", {}):
 				cost.append("%s %d/%d" % [Registry.display_name("item", item), b.storage.count(item), int(next["cost"][item])])
-			v.add_child(AfUI.label(("Построить: " if lvl == 0 else "Улучшить: ") + ", ".join(cost) + " · %d ч работы" % int(next.get("build_hours", 6)), 14, AfTheme.TEXT, true))
+			if Session.config.god_mode:
+				v.add_child(AfUI.label("Игра бога: бесплатно и сразу", 14, AfTheme.GOOD))
+			else:
+				v.add_child(AfUI.label(("Построить: " if lvl == 0 else "Улучшить: ") + ", ".join(cost) + " · %d ч работы" % int(next.get("build_hours", 6)), 14, AfTheme.TEXT, true))
 			var problem := b.build_problem(id)
 			var btn := AfUI.accent_button("Построить" if lvl == 0 else "Улучшить", func():
 				var r := b.order_build(id)
@@ -249,9 +252,9 @@ func _buildings() -> void:
 			elif problem == "уже строится":
 				row.add_child(AfUI.label("строится…", 14, AfTheme.ACCENT_SOFT))
 		if lvl > 0 and b.condition(id) < 0.85:
-			var rc := b.repair_cost(id)
+			var rc := {} if Session.config.god_mode else b.repair_cost(id)
 			var rtxt := ", ".join(PackedStringArray(rc.keys().map(func(k): return "%s %d" % [Registry.display_name("item", k), rc[k]])))
-			row.add_child(AfUI.button("Ремонт (%s)" % rtxt, func():
+			row.add_child(AfUI.button("Ремонт (%s)" % rtxt if rtxt != "" else "Ремонт", func():
 				var r := b.repair(id)
 				if r != "":
 					EventBus.toast(r, "warn")

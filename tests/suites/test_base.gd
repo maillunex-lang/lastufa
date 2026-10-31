@@ -210,3 +210,31 @@ func test_auto_assign(t) -> void:
 	Scheduler.fast_forward(60.0, 60.0)
 	t.eq(builder["job"], "build", "the builder goes to the construction site")
 	t.eq(fighter["job"], "guard", "the fighter guards")
+
+
+func test_god_mode(t) -> void:
+	Session.new_game({"god": true})
+	t.ok(Session.config.god_mode, "god mode on")
+	t.ok(Session.config.summary().contains("игра бога"), "shown in summary")
+	var s := Session.player.survival
+	s.take_hit(500.0, "test")
+	s.add_injury("bleeding", 1.0, "torso")
+	s.expose_to_infection(1.0)
+	for i in 30:
+		s.simulate(240.0)
+	t.ok(not s.dead, "the hero never dies")
+	t.ok(s.health >= 1.0, "health stays above zero")
+	var b := _found(t)
+	Session.events.pending.clear()
+	t.eq(b.build_problem("generator"), "", "no material requirements")
+	t.eq(b.order_build("generator"), "", "ordered")
+	t.eq(b.level("generator"), 1, "built instantly")
+	t.ok(b.queue.is_empty(), "no construction queue")
+	b.order_build("workshop")
+	b.recipe_targets["core:bandage"] = 5
+	Scheduler.fast_forward(120.0, 60.0)
+	t.ok(b.storage.count("bandage") >= 5, "workshop produces without inputs or workers")
+	t.ok(Saves.save("slot_3"), "saved")
+	Session.new_game()
+	Saves.load_slot("slot_3", false)
+	t.ok(Session.config.god_mode and Session.player.survival.invulnerable, "god mode restored after load")

@@ -17,6 +17,8 @@ const PRESETS := {
 var difficulty := "normal"
 var hunger_enabled := true
 var thirst_enabled := true
+## "God game": immortal hero, buildings and items are free and instant.
+var god_mode := false
 
 
 func setup(params: Dictionary) -> void:
@@ -25,6 +27,7 @@ func setup(params: Dictionary) -> void:
 		difficulty = "normal"
 	hunger_enabled = bool(params.get("hunger", true))
 	thirst_enabled = bool(params.get("thirst", true))
+	god_mode = bool(params.get("god", false))
 
 
 func p(key: String) -> float:
@@ -51,6 +54,8 @@ func summary() -> String:
 		off.append("без голода")
 	if not thirst_enabled:
 		off.append("без жажды")
+	if god_mode:
+		off.append("игра бога")
 	return label() + ("" if off.is_empty() else " · " + ", ".join(off))
 
 
@@ -64,7 +69,7 @@ func schema_sql() -> PackedStringArray:
 
 func save_to_db(db: AfDatabase) -> void:
 	db.exec("INSERT OR REPLACE INTO game_config VALUES ('rules', ?)",
-		[JSON.stringify({"difficulty": difficulty, "hunger": hunger_enabled, "thirst": thirst_enabled})])
+		[JSON.stringify({"difficulty": difficulty, "hunger": hunger_enabled, "thirst": thirst_enabled, "god": god_mode})])
 
 
 func load_from_db(db: AfDatabase) -> void:

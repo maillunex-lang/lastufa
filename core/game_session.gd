@@ -56,6 +56,7 @@ func start_from_db(db: AfDatabase) -> void:
 
 
 func _begin() -> void:
+	player.survival.invulnerable = config.god_mode
 	slot = slot if slot != "" else "slot_1"
 	_register_tasks()
 	_connect_events()
@@ -103,6 +104,7 @@ func _tick_survival(dt: float) -> void:
 	s.protected_floor = 25.0 if offline_mode else -1.0
 	s.need_rate_mult = config.p("need_rate")
 	s.disabled_needs = config.disabled_needs()
+	s.invulnerable = config.god_mode
 	s.simulate(dt)
 	if s.dead:
 		journal.add("death", "Погиб: %s." % s.death_cause)

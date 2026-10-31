@@ -19,6 +19,8 @@ func _init() -> void:
 	row.add_child(left)
 	_summary = AfUI.label("", 17, AfTheme.TEXT_DIM)
 	left.add_child(_summary)
+	if Session.config.god_mode:
+		left.add_child(AfUI.accent_button("Создать предмет (игра бога)", func(): get_parent().add_child(AfItemCreatorPanel.new())))
 	_list = AfUI.vbox(6)
 	left.add_child(AfUI.scroll(_list))
 	var right := AfUI.card(16)

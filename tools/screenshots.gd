@@ -39,6 +39,9 @@ func _run() -> void:
 	layer.add_child(ng)
 	ng._pick("hard")
 	await _shot("01b_new_game", 10)
+	if OS.get_cmdline_user_args().has("only-menu"):
+		get_tree().quit()
+		return
 	await _clear()
 	Session.new_game()
 	Clock.start(14.0 * 60.0)

@@ -39,6 +39,8 @@ var need_rate_mult := 1.0
 var disabled_needs: Array = []
 ## Offline protection: needs and health never fall below these floors.
 var protected_floor := -1.0
+## God mode: the hero can be hurt but never drops below 1 health and never dies.
+var invulnerable := false
 
 
 func reset() -> void:
@@ -308,6 +310,9 @@ func _damage(amount: float, cause: String) -> void:
 	if amount <= 0.0 or dead:
 		return
 	health -= amount
+	if invulnerable:
+		health = maxf(health, 1.0)
+		return
 	if health <= 0.0:
 		if protected_floor >= 0.0:
 			health = protected_floor
@@ -321,6 +326,9 @@ func take_hit(amount: float, cause: String) -> void:
 
 
 func _die(cause: String) -> void:
+	if invulnerable:
+		health = maxf(health, 1.0)
+		return
 	health = 0.0
 	dead = true
 	death_cause = cause

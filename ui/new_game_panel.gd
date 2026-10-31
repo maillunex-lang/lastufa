@@ -7,6 +7,7 @@ signal start_requested(params: Dictionary)
 var _difficulty := "normal"
 var _hunger := true
 var _thirst := true
+var _god := false
 var _diff_buttons := {}
 var _desc: Label
 
@@ -31,10 +32,12 @@ func _init() -> void:
 	v.add_child(_toggle("Голод — нужно искать и есть еду", true, func(on): _hunger = on))
 	v.add_child(_toggle("Жажда — нужно искать и пить воду", true, func(on): _thirst = on))
 	v.add_child(AfUI.label("Отключённая потребность всегда заполнена и не влияет на здоровье. Сон, температура тела, травмы и инфекция остаются. Параметры сохраняются вместе с игрой и не меняются после начала.", 14, AfTheme.TEXT_DIM, true))
+	v.add_child(AfUI.label("Режим", 20, AfTheme.ACCENT_SOFT))
+	v.add_child(_toggle("Игра бога — герой бессмертен, постройки и предметы создаются бесплатно и сразу", false, func(on): _god = on))
 	var bottom := AfUI.hbox(10)
 	bottom.add_child(AfUI.spacer())
 	bottom.add_child(AfUI.accent_button("Начать игру", func():
-		start_requested.emit({"difficulty": _difficulty, "hunger": _hunger, "thirst": _thirst})
+		start_requested.emit({"difficulty": _difficulty, "hunger": _hunger, "thirst": _thirst, "god": _god})
 		close(), 260))
 	body.add_child(bottom)
 	_pick("normal")
