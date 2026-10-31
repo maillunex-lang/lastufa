@@ -159,6 +159,7 @@ func save(slot: String, reason: String = "manual") -> bool:
 		"region": Registry.display_name("region", Session.world_map.current_region),
 		"health": int(p.survival.health),
 		"hero": p.name,
+		"difficulty": Session.config.summary(),
 		"packages": Registry.active_packages.map(func(x): return {"id": x["id"], "version": x["version"]}),
 	}
 	AfFs.write_json_atomic(dir.path_join("meta.json"), meta)

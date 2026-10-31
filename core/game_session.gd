@@ -12,6 +12,8 @@ var weather := AfWeather.new()
 var journal := AfJournal.new()
 var locations := AfLocationStates.new()
 var rules := AfRuleEngine.new()
+## Difficulty and enabled needs of the current playthrough.
+var config := AfGameConfig.new()
 
 ## Environment inputs written by the 3D scene each frame.
 var threat_nearby := false
@@ -21,11 +23,13 @@ const NEW_GAME_START_MINUTES := 6.0 * 60.0 + 30.0
 
 
 func persistables() -> Array:
-	return [Clock, player, world_map, weather, journal, locations, rules]
+	return [Clock, config, player, world_map, weather, journal, locations, rules]
 
 
-func new_game() -> void:
+## params: {difficulty: easy|normal|hard|nightmare, hunger: bool, thirst: bool}
+func new_game(params: Dictionary = {}) -> void:
 	end_session()
+	config.setup(params)
 	Clock.start(NEW_GAME_START_MINUTES)
 	Clock.set_speed(0)
 	player.new_game()
@@ -90,6 +94,8 @@ func _tick_survival(dt: float) -> void:
 	s.exertion = player_exertion
 	s.threat_nearby = threat_nearby
 	s.protected_floor = 25.0 if offline_mode else -1.0
+	s.need_rate_mult = config.p("need_rate")
+	s.disabled_needs = config.disabled_needs()
 	s.simulate(dt)
 	if s.dead:
 		journal.add("death", "Погиб: %s." % s.death_cause)

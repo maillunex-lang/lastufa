@@ -34,7 +34,7 @@ func _rebuild() -> void:
 		v.add_child(AfUI.label(nice, 20, AfTheme.ACCENT_SOFT))
 		if info["exists"]:
 			v.add_child(AfUI.label("День %s, %s · %s · %s · здоровье %s" % [info.get("day", "?"), info.get("time", ""), info.get("season", ""), info.get("region", ""), info.get("health", "?")], 16))
-			v.add_child(AfUI.label("%s · v%s" % [str(info.get("saved_text", "")), info.get("game_version", "?")], 14, AfTheme.TEXT_DIM))
+			v.add_child(AfUI.label("%s · v%s%s" % [str(info.get("saved_text", "")), info.get("game_version", "?"), (" · " + str(info["difficulty"])) if info.has("difficulty") else ""], 14, AfTheme.TEXT_DIM))
 		else:
 			v.add_child(AfUI.label("Пусто", 16, AfTheme.TEXT_DIM))
 		if saving:

@@ -121,3 +121,23 @@ func test_loot_roll(t) -> void:
 			total += int(it["qty"])
 	t.ok(total > 50, "pharmacy yields items (%d)" % total)
 	t.eq(AfInventory.roll_loot("no_such_table", rng).size(), 0, "unknown table -> nothing")
+
+
+func test_difficulty_need_rate(t) -> void:
+	var easy := _fresh()
+	easy.need_rate_mult = AfGameConfig.PRESETS["easy"]["need_rate"]
+	var hard := _fresh()
+	hard.need_rate_mult = AfGameConfig.PRESETS["nightmare"]["need_rate"]
+	easy.simulate(600.0)
+	hard.simulate(600.0)
+	t.ok(easy.need("hydration") > hard.need("hydration") + 20.0, "nightmare drains water much faster")
+
+
+func test_disabled_needs_never_kill(t) -> void:
+	var s := _fresh()
+	s.disabled_needs = ["satiety", "hydration"]
+	for i in 96:
+		s.simulate(60.0)
+		s.needs["energy"] = 100.0
+	t.ok(not s.dead, "no starvation or dehydration when both are off")
+	t.eq(s.need("satiety"), 100.0, "satiety full")

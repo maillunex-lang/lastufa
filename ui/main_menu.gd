@@ -72,18 +72,24 @@ func _on_restart_required(version: String) -> void:
 
 
 func _new_game() -> void:
-	var start := func():
-		Saves.clear_crash_marker()
-		if get_tree().has_meta("crash_recovery"):
-			get_tree().remove_meta("crash_recovery")
-		Session.slot = "slot_1"
-		Session.new_game()
-		Saves.save("autosave", "new_game")
-		get_tree().change_scene_to_file("res://scenes/game.tscn")
+	var setup := func():
+		var panel := AfNewGamePanel.new()
+		panel.start_requested.connect(_start_new_game)
+		_layer.add_child(panel)
 	if Saves.latest_slot() != "":
-		AfDialog.show_in(_layer, "Новая игра", "Автосохранение будет перезаписано. Ручные слоты сохранятся.", [["Отмена", Callable()], ["Начать", start]])
+		AfDialog.show_in(_layer, "Новая игра", "Автосохранение будет перезаписано. Ручные слоты сохранятся.", [["Отмена", Callable()], ["Дальше", setup]])
 	else:
-		start.call()
+		setup.call()
+
+
+func _start_new_game(params: Dictionary) -> void:
+	Saves.clear_crash_marker()
+	if get_tree().has_meta("crash_recovery"):
+		get_tree().remove_meta("crash_recovery")
+	Session.slot = "slot_1"
+	Session.new_game(params)
+	Saves.save("autosave", "new_game")
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 
 func _load(slot: String) -> void:

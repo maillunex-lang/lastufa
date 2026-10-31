@@ -250,6 +250,8 @@ func _refresh() -> void:
 	_bars["health"].value = s.health
 	_bars["satiety"].value = s.need("satiety")
 	_bars["hydration"].value = s.need("hydration")
+	_bars["satiety"].get_parent().visible = Session.config.hunger_enabled
+	_bars["hydration"].get_parent().visible = Session.config.thirst_enabled
 	_bars["energy"].value = s.need("energy")
 	_bars["stamina"].value = world.player.stamina
 	_bars["stress"].value = s.stress

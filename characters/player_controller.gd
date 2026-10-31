@@ -344,7 +344,7 @@ func _auto_face(max_range: float) -> AfZombie:
 func receive_hit(z: AfZombie) -> void:
 	if dead:
 		return
-	var dmg := float(z.def.get("damage", 8.0)) * randf_range(0.8, 1.2)
+	var dmg := float(z.def.get("damage", 8.0)) * randf_range(0.8, 1.2) * Session.config.p("zombie_damage")
 	if sneaking:
 		dmg *= 1.1
 	state.survival.take_hit(dmg, z.def.get("name", "заражённый"))

@@ -69,7 +69,7 @@ func spawn(type_id: String, pos: Vector3, hp: float = -1.0, pkg: String = "core"
 func populate(loc_def: Dictionary) -> void:
 	var st := Session.locations.state(location_id)
 	var pkg := str(loc_def.get("_package", "core"))
-	var density_factor := _density_factor(loc_def)
+	var density_factor := _density_factor(loc_def) * Session.config.p("zombie_count")
 	if st["zombies"] == null:
 		for sp in loc_def.get("zombie_spawns", []):
 			var n := maxi(0, roundi(int(sp.get("count", 1)) * density_factor))

@@ -134,3 +134,36 @@ func test_crash_marker(t) -> void:
 	t.ok(FileAccess.file_exists(AfPaths.SESSION_LOCK), "lock exists during session")
 	Session.end_session()
 	t.ok(not FileAccess.file_exists(AfPaths.SESSION_LOCK), "lock removed on clean end")
+
+
+func test_game_config_saved_and_applied(t) -> void:
+	Session.new_game({"difficulty": "hard", "hunger": false, "thirst": true})
+	t.eq(Session.config.difficulty, "hard", "difficulty set")
+	Session.player.survival.needs["satiety"] = 50.0
+	Scheduler.fast_forward(24.0 * 60.0, 60.0)
+	var s := Session.player.survival
+	t.eq(s.need("satiety"), 100.0, "hunger disabled: satiety stays full")
+	t.ok(s.need("hydration") < 50.0, "thirst still active")
+	t.ok(Saves.save("slot_3"), "saved")
+	Session.new_game()
+	t.eq(Session.config.difficulty, "normal", "new game defaults")
+	t.ok(Saves.load_slot("slot_3", false)["ok"], "loaded")
+	t.eq(Session.config.difficulty, "hard", "difficulty restored")
+	t.ok(not Session.config.hunger_enabled and Session.config.thirst_enabled, "needs settings restored")
+	t.ok(str(Saves.slot_info("slot_3").get("difficulty", "")).contains("без голода"), "slot list shows settings")
+
+
+func test_old_save_without_config_is_normal(t) -> void:
+	Session.new_game({"difficulty": "nightmare"})
+	Saves.save("slot_4")
+	var path := "user://saves/slot_4/world.db"
+	var db := AfDatabase.new()
+	db.open(path)
+	db.exec("DROP TABLE game_config")
+	db.close()
+	var meta := Saves.slot_info("slot_4")
+	meta["sha256"] = AfFs.sha256_file(path)
+	AfFs.write_json_atomic("user://saves/slot_4/meta.json", meta)
+	t.ok(Saves.load_slot("slot_4", false)["ok"], "old save loads")
+	t.eq(Session.config.difficulty, "normal", "defaults to normal")
+	t.ok(Session.config.hunger_enabled and Session.config.thirst_enabled, "all needs on")

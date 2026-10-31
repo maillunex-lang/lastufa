@@ -211,7 +211,7 @@ func travel(to_id: String) -> PackedStringArray:
 		done_km += WALK_KMH * p.survival.move_multiplier() * Session.weather.move_mult()
 		_auto_consume(report)
 		var dens := lerpf(density(from_id), density(to_id), clampf(done_km / km, 0.0, 1.0))
-		if _rng.randf() < dens * 0.12:
+		if _rng.randf() < dens * 0.12 * Session.config.p("zombie_count"):
 			report.append(_encounter(dens))
 	p.survival.exertion = 0.0
 	if p.survival.dead:
@@ -241,7 +241,7 @@ func search_area() -> PackedStringArray:
 		Scheduler.fast_forward(60.0, 30.0)
 		if p.survival.dead:
 			break
-		if _rng.randf() < density(current_region) * 0.25:
+		if _rng.randf() < density(current_region) * 0.25 * Session.config.p("zombie_count"):
 			report.append(_encounter(density(current_region)))
 	p.survival.exertion = 0.0
 	if p.survival.dead:
@@ -264,7 +264,7 @@ func search_area() -> PackedStringArray:
 func _auto_consume(report: PackedStringArray) -> void:
 	var p := Session.player
 	for pair in [["hydration", "drink"], ["satiety", "food"]]:
-		if p.survival.need(pair[0]) > 45.0:
+		if p.survival.need(pair[0]) > 45.0 or Session.config.disabled_needs().has(pair[0]):
 			continue
 		for s in p.inventory.stacks:
 			var d := p.inventory.def_of(s)
@@ -292,7 +292,7 @@ func _encounter(dens: float) -> String:
 			defense = 0.35 * float(mstack["condition"])
 			mstack["condition"] = maxf(0.0, float(mstack["condition"]) - 0.03)
 			how = str(melee["name"])
-	var dmg := _rng.randf_range(4.0, 16.0) * (0.5 + dens) * (1.0 - defense)
+	var dmg := _rng.randf_range(4.0, 16.0) * (0.5 + dens) * (1.0 - defense) * Session.config.p("zombie_damage")
 	p.survival.take_hit(dmg, "нападение заражённых")
 	var extra := ""
 	if _rng.randf() < 0.3 * (1.0 - defense):
@@ -368,7 +368,7 @@ func walk_to_place(place_id: String) -> PackedStringArray:
 		var step := minf(30.0, left)
 		Scheduler.fast_forward(step, step)
 		left -= step
-		if _rng.randf() < dens * 0.08 * step / 30.0:
+		if _rng.randf() < dens * 0.08 * step / 30.0 * Session.config.p("zombie_count"):
 			report.append(_encounter(dens))
 	p.survival.exertion = 0.0
 	if p.survival.dead:

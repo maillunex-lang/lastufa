@@ -24,6 +24,7 @@ func _show_state() -> void:
 	var p := Session.player
 	var s := p.survival
 	_content.add_child(AfUI.label("%s · убито заражённых: %d" % [p.name, p.kills], 22, AfTheme.ACCENT_SOFT))
+	_content.add_child(AfUI.label("Сложность: " + Session.config.summary(), 15, AfTheme.TEXT_DIM))
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 18)
@@ -33,6 +34,8 @@ func _show_state() -> void:
 		["Энергия", s.need("energy"), Color("9f8fd0")], ["Гигиена", s.need("hygiene"), Color("8fb0a0")], ["Стресс", s.stress, Color("b06a8a")],
 		["Боль", s.pain(), AfTheme.WARN]]
 	for r in rows:
+		if (r[0] == "Сытость" and not Session.config.hunger_enabled) or (r[0] == "Вода" and not Session.config.thirst_enabled):
+			continue
 		var l := AfUI.label("%s  %d" % [r[0], int(r[1])], 17)
 		l.custom_minimum_size = Vector2(170, 0)
 		grid.add_child(l)

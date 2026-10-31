@@ -143,8 +143,12 @@ static func roll_loot(table_id: String, rng: RandomNumberGenerator, scarcity: fl
 		return out
 	if rng.randf() < float(t.get("empty_chance", 0.0)) + (1.0 - scarcity) * 0.5:
 		return out
+	var mult := Session.config.p("loot")
+	if mult < 1.0 and rng.randf() < (1.0 - mult) * 0.4:
+		return out
 	var rolls: Array = t.get("rolls", [1, 1])
-	var n := rng.randi_range(int(rolls[0]), int(rolls[1]))
+	var raw := rng.randi_range(int(rolls[0]), int(rolls[1])) * mult
+	var n := int(floor(raw)) + (1 if rng.randf() < raw - floor(raw) else 0)
 	var entries: Array = t["entries"]
 	var total := 0.0
 	for e in entries:

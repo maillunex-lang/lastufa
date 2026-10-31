@@ -34,6 +34,9 @@ var insulation := 0.0
 var wet := 0.0            # 0..1
 var exertion := 0.0       # 0 rest, 1 walk, 2 sprint
 var threat_nearby := false
+## Game settings: need decay multiplier and needs switched off for this playthrough.
+var need_rate_mult := 1.0
+var disabled_needs: Array = []
 ## Offline protection: needs and health never fall below these floors.
 var protected_floor := -1.0
 
@@ -100,8 +103,11 @@ func simulate(dt: float) -> void:
 	# --- needs
 	for def in Registry.all("need"):
 		var id := _short(def["id"])
-		var v := need(id)
 		var maxv := float(def["max"])
+		if disabled_needs.has(id):
+			needs[id] = maxv
+			continue
+		var v := need(id)
 		if id == "energy" and sleeping:
 			v += float(def.get("sleep_recovery_per_hour", 10.0)) * hours
 		else:
@@ -114,7 +120,7 @@ func simulate(dt: float) -> void:
 				rate *= 1.3
 			if sleeping:
 				rate *= 0.6
-			v -= rate * hours
+			v -= rate * need_rate_mult * hours
 		v = clampf(v, 0.0, maxv)
 		if v <= 0.0:
 			_damage(float(def.get("damage_per_hour_at_zero", 0.0)) * hours, "истощение" if id != "hydration" else "обезвоживание")
@@ -232,7 +238,7 @@ func expose_to_infection(chance: float) -> bool:
 	infection["exposure"] = float(infection["exposure"]) + chance
 	if infection["stage"] != "none":
 		return false
-	if randf() < chance:
+	if randf() < chance * Session.config.p("infection"):
 		infection["stage"] = "incubation"
 		infection["minutes_in_stage"] = 0.0
 		infection["incubation_hours"] = randf_range(14.0, 36.0)
