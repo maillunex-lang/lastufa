@@ -171,3 +171,15 @@ func test_corrupted_download_is_rejected(t) -> void:
 	t.eq(Packages.installed_version("region.sterlitamak"), "", "nothing installed")
 	var err := str(SystemDB.db.scalar("SELECT last_error FROM downloads WHERE rel_path = 'data/loot.json'", [], ""))
 	t.ok(err.contains("контрольная сумма"), "checksum error recorded: %s" % err)
+
+
+func test_code_update_detection(t) -> void:
+	Updates.catalog = []
+	var e := {"id": "game.core", "version": "99.0.0", "state": "update", "engine": Bootstrap.engine_version, "min_apk_build": 1}
+	Updates.catalog.append(e)
+	t.eq(Updates.code_update().get("version"), "99.0.0", "newer code pack offered")
+	t.eq(Updates.catalog_file(), "catalog.json", "stable channel catalog")
+	Settings.set_value("content/channel", "beta")
+	t.eq(Updates.catalog_file(), "catalog-beta.json", "beta channel catalog")
+	Settings.set_value("content/channel", "stable")
+	Updates.catalog = []

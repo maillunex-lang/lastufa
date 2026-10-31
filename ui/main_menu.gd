@@ -30,7 +30,10 @@ func _ready() -> void:
 	left.add_child(AfUI.label("ASHENFALL", 72, AfTheme.ACCENT_SOFT))
 	left.add_child(AfUI.label("U F A", 34, AfTheme.ACCENT))
 	left.add_child(AfUI.label("Постапокалиптический Башкортостан. Выживите, соберите людей, восстановите то, что осталось.", 18, AfTheme.TEXT_DIM, true))
-	left.add_child(AfUI.label("v%s · пакетов: %d · %s" % [AfPaths.game_version(), Registry.active_packages.size(), Settings.PROFILES[Settings.active_profile_name]["label"] + " профиль"], 14, AfTheme.TEXT_DIM))
+	var ver := "v%s" % AfPaths.game_version()
+	if Bootstrap.is_code_updated():
+		ver += " (APK %s)" % Bootstrap.apk_version
+	left.add_child(AfUI.label("%s · пакетов: %d · %s" % [ver, Registry.active_packages.size(), Settings.PROFILES[Settings.active_profile_name]["label"] + " профиль"], 14, AfTheme.TEXT_DIM))
 	var right := AfUI.vbox(10)
 	right.custom_minimum_size = Vector2(380, 0)
 	right.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -51,6 +54,21 @@ func _ready() -> void:
 	_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_layer)
+	Updates.restart_required.connect(_on_restart_required)
+	if Updates.pending_restart_version != "":
+		_on_restart_required.call_deferred(Updates.pending_restart_version)
+
+
+func _exit_tree() -> void:
+	if Updates.restart_required.is_connected(_on_restart_required):
+		Updates.restart_required.disconnect(_on_restart_required)
+
+
+func _on_restart_required(version: String) -> void:
+	var text := "Обновление игры %s установлено и заработает после перезапуска." % version
+	if OS.get_name() == "Android":
+		text += " Игра закроется — откройте её снова."
+	AfDialog.show_in(_layer, "Требуется перезапуск", text, [["Позже", Callable()], ["Перезапустить", Updates.restart_game]])
 
 
 func _new_game() -> void:

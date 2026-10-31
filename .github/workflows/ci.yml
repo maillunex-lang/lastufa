@@ -1,7 +1,7 @@
 name: CI
 
+# Pushes to the default branch are tested and published by publish-updates.yml.
 on:
-  push:
   pull_request:
   workflow_dispatch:
 

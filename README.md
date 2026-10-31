@@ -62,6 +62,8 @@ CI (`.github/workflows/ci.yml`) компилирует скрипты, гоня�
 | «Только Wi-Fi» на Android | ⚠️ код через JNI есть, на устройстве не проверен |
 | Моды: данные + декларативные правила-скрипты (песочница) | ✅ API v1 |
 | Прототип: локация, герой, заражённые, бой, лут, потребности, травмы, инфекция, карта, путешествия | ✅ играбельно |
+| Обновление кода игры без APK (подписанный .pck, Bootstrap, защита от неудачного запуска) | ✅ проверено сквозным тестом на десктопной сборке |
+| Сервер обновлений: GitHub Pages + CI-публикация, каналы, откат | ✅ готово; требует включения Pages и секретов (см. UPDATE_SERVER.md) |
 | Android APK (arm64-v8a + x86_64, targetSdk 35) | ✅ собирается и проходит apksigner/zipalign; **на устройстве/эмуляторе не запускался** |
 | База, жители, крафт, транспорт, фракции, дипломатия, экономика, государство, армия, сюжет, кооператив | ❌ не начаты — см. дорожную карту |
 
@@ -91,6 +93,8 @@ tools/            afpkg.py (сборка/подпись/сервер), сбор�
 tests/            тестовый раннер и наборы
 documentation/    архитектура, доставка контента, моддинг, дорожная карта, дизайн
 ```
+
+Обновления без переустановки APK: [UPDATE_SERVER](documentation/UPDATE_SERVER.md) — каждый `git push` публикуется на `https://maillunex-lang.github.io/lastufa/`, игра подхватывает новый код при запуске.
 
 Подробно: [ARCHITECTURE](documentation/ARCHITECTURE.md) · [CONTENT_DELIVERY](documentation/CONTENT_DELIVERY.md) · [MODDING](documentation/MODDING.md) · [ROADMAP](documentation/ROADMAP.md) · [GAME_DESIGN](documentation/GAME_DESIGN.md)
 

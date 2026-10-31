@@ -1,7 +1,8 @@
 {
-	"_comment": "Mirrors are tried in order. 127.0.0.1 = local dev server (tools/afpkg.py serve); 10.0.2.2 = host machine from the Android emulator. Production CDN mirrors are added here before release.",
+	"_comment": "Mirrors are tried in order. Production: GitHub Pages of the repository (published by .github/workflows/publish-updates.yml). 127.0.0.1 = local dev server (tools/afpkg.py serve); 10.0.2.2 = host machine from the Android emulator.",
 	"channels": {
-		"stable": ["http://127.0.0.1:8765", "http://10.0.2.2:8765"],
+		"stable": ["https://maillunex-lang.github.io/lastufa", "http://127.0.0.1:8765", "http://10.0.2.2:8765"],
+		"beta": ["https://maillunex-lang.github.io/lastufa", "http://127.0.0.1:8765", "http://10.0.2.2:8765"],
 		"dev": ["http://127.0.0.1:8765", "http://10.0.2.2:8765"]
 	}
 }

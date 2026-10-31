@@ -4,8 +4,10 @@
 # Requirements: Godot 4.5.1 (GODOT env var), its export templates installed,
 # Android SDK (build-tools 35, platform 35), JDK 17+.
 # Usage:
-#   GODOT=/path/to/godot ANDROID_SDK=/path/to/sdk tools/build_apk.sh [debug|release]
-# Release builds need: KEYSTORE, KEYSTORE_USER, KEYSTORE_PASS (never commit them).
+#   GODOT=/path/to/godot ANDROID_SDK=/path/to/sdk tools/build_apk.sh [debug|release|pack]
+# release: needs KEYSTORE, KEYSTORE_USER, KEYSTORE_PASS (never commit them).
+# pack:    exports only build/game.pck - the game-code update published to the
+#          update server (no APK rebuild needed for players).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 MODE="${1:-debug}"
@@ -27,7 +29,14 @@ set_setting() { # key value
 set_setting export/android/android_sdk_path "$ANDROID_SDK"
 set_setting export/android/java_sdk_path "$JAVA_HOME"
 
-if [[ "$MODE" == "debug" ]]; then
+if [[ "$MODE" == "pack" ]]; then
+  "$GODOT" --headless --import >/dev/null 2>&1 || true
+  rm -f build/game.pck
+  "$GODOT" --headless --export-pack "Android" build/game.pck
+  [[ -f build/game.pck ]] || { echo "pck export failed"; exit 1; }
+  echo "Built build/game.pck ($(du -h build/game.pck | cut -f1))"
+  exit 0
+elif [[ "$MODE" == "debug" ]]; then
   KS="${DEBUG_KEYSTORE:-build/debug.keystore}"
   if [[ ! -f "$KS" ]]; then
     keytool -genkeypair -keystore "$KS" -storepass android -alias androiddebugkey -keypass android \

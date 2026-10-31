@@ -24,6 +24,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	Updates.restart_required.connect(_on_restart_required)
 	Packages.packages_changed.connect(_mark)
 	Updates.catalog_updated.connect(_mark)
 	Updates.queue_changed.connect(_mark)
@@ -32,6 +33,8 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	super._exit_tree()
+	if Updates.restart_required.is_connected(_on_restart_required):
+		Updates.restart_required.disconnect(_on_restart_required)
 	for pair in [[Packages.packages_changed, _mark], [Updates.catalog_updated, _mark], [Updates.queue_changed, _mark]]:
 		if pair[0].is_connected(pair[1]):
 			pair[0].disconnect(pair[1])
@@ -40,6 +43,13 @@ func _exit_tree() -> void:
 
 
 var _dirty_registry := false
+
+
+func _on_restart_required(version: String) -> void:
+	if get_tree().current_scene and get_tree().current_scene.has_method("_on_restart_required"):
+		return  # the main menu shows its own dialog
+	AfDialog.show_in(self, "Требуется перезапуск", "Обновление игры %s установлено и заработает после перезапуска." % version,
+		[["Позже", Callable()], ["Перезапустить", Updates.restart_game]])
 
 
 func _mark() -> void:

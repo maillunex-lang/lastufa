@@ -6,6 +6,7 @@ config_version=5
 config/name="ASHENFALL: UFA"
 config/description="Isometric survival RPG set in post-apocalyptic Bashkortostan."
 config/version="0.1.0"
+config/apk_build=2
 run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
@@ -16,6 +17,7 @@ config/auto_accept_quit=false
 
 [autoload]
 
+Bootstrap="*res://core/bootstrap.gd"
 Log="*res://core/log.gd"
 EventBus="*res://core/event_bus.gd"
 Settings="*res://core/settings.gd"

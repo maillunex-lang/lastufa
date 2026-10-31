@@ -13,3 +13,7 @@ __pycache__/
 *.pyc
 tools/keys/release_*.pem
 tools/keys/*.keystore
+*.keystore
+*_private.pem
+!tools/keys/dev_private.pem
+secrets/

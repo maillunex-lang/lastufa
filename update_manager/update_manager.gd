@@ -2,7 +2,7 @@ extends Node
 ## Content update manager and download queue.
 ##
 ## Server layout (produced by tools/afpkg.py build):
-##   <mirror>/catalog.json
+##   <mirror>/catalog.json            (channel "stable"; other channels: catalog-<channel>.json)
 ##   <mirror>/packages/<id>/<version>/manifest.json
 ##   <mirror>/packages/<id>/<version>/files/<relative path>
 ##   <mirror>/packages/<id>/<version>/<id>-<version>.zip   (for manual import)
@@ -16,6 +16,12 @@ extends Node
 signal catalog_updated
 signal queue_changed
 signal job_finished(job: String, ok: bool, message: String)
+## A game-code pack was installed: it takes effect after the game restarts.
+signal restart_required(version: String)
+
+const CODE_PACKAGE := "game.core"
+
+var pending_restart_version := ""
 
 const MAX_ATTEMPTS := 6
 
@@ -75,7 +81,7 @@ func check_updates() -> bool:
 	var data: Variant = null
 	for attempt in list.size():
 		var base := _mirror(attempt)
-		var got: Variant = await _fetch_json(base + "/catalog.json")
+		var got: Variant = await _fetch_json(base + "/" + catalog_file())
 		if typeof(got) == TYPE_DICTIONARY and typeof(got.get("packages")) == TYPE_ARRAY:
 			_mirror_index = (_mirror_index + attempt) % maxi(1, list.size())
 			data = got
@@ -92,6 +98,9 @@ func check_updates() -> bool:
 			continue
 		var e: Dictionary = entry.duplicate()
 		var have := Packages.installed_version(str(e["id"]))
+		if str(e["id"]) == CODE_PACKAGE:
+			# the running code version (APK or a mounted pack) is what matters
+			have = AfPaths.game_version() if pending_restart_version == "" else pending_restart_version
 		e["installed_version"] = have
 		if have == "":
 			e["state"] = "available"
@@ -101,10 +110,41 @@ func check_updates() -> bool:
 			e["state"] = "installed"
 		if e.has("min_game_version") and AfVersion.compare(AfPaths.game_version(), str(e["min_game_version"])) < 0:
 			e["state"] = "incompatible"
+		if str(e["id"]) == CODE_PACKAGE and e["state"] == "update":
+			var disabled: Variant = AfFs.read_json(Bootstrap.DISABLED_FILE)
+			if typeof(disabled) == TYPE_ARRAY and (disabled as Array).has("%s@%s" % [e["id"], e["version"]]):
+				e["state"] = "broken"  # this version failed to start on this device
+			elif str(e.get("engine", "")) != "" and str(e["engine"]) != Bootstrap.engine_version:
+				e["state"] = "incompatible"
+			elif int(e.get("min_apk_build", 0)) > Bootstrap.apk_build:
+				e["state"] = "incompatible"
 		catalog.append(e)
 	Log.i("updates", "catalog: %d packages from %s" % [catalog.size(), _mirror()])
 	catalog_updated.emit()
 	return true
+
+
+func catalog_file() -> String:
+	var channel := str(Settings.get_value("content/channel"))
+	return "catalog.json" if channel == "stable" or channel == "" else "catalog-%s.json" % channel
+
+
+## Catalog entry of a newer game-code pack, or {} when the game is up to date.
+func code_update() -> Dictionary:
+	for e in catalog:
+		if str(e["id"]) == CODE_PACKAGE and str(e["state"]) == "update":
+			return e
+	return {}
+
+
+func restart_game() -> void:
+	# Android can't relaunch itself from Godot: the player reopens the app.
+	if OS.get_name() != "Android":
+		OS.set_restart_on_exit(true, OS.get_cmdline_args())
+	if Session.active:
+		Saves.save("autosave", "update")
+		Session.end_session()
+	get_tree().quit()
 
 
 func updates_available() -> Array:
@@ -361,6 +401,9 @@ func _try_finish_job(job: String) -> void:
 		AfFs.remove_recursive(AfPaths.DOWNLOADS_DIR.path_join(str(manifest["id"])).path_join(str(manifest["version"])))
 		_speed_bps.erase(job)
 		EventBus.toast("Установлено: %s %s" % [manifest.get("name", manifest["id"]), manifest["version"]], "good")
+		if Packages.has_code(str(manifest["id"])):
+			pending_restart_version = str(manifest["version"])
+			restart_required.emit(pending_restart_version)
 	else:
 		SystemDB.db.exec("UPDATE download_jobs SET state = 'error' WHERE job = ?", [job])
 		SystemDB.db.exec("UPDATE downloads SET last_error = ? WHERE job = ?", [res["error"], job])

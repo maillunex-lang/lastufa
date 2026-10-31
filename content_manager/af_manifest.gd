@@ -23,7 +23,7 @@ const SYSTEM_VERSIONS := {
 
 const ALLOWED_EXT := ["json", "png", "jpg", "jpeg", "webp", "glb", "gltf", "bin", "ogg", "wav", "mp3",
 	"md", "txt", "csv", "po", "ttf", "otf", "pck"]
-const ALLOWED_TOP_DIRS := ["data", "assets", "scripts", "locale"]
+const ALLOWED_TOP_DIRS := ["data", "assets", "scripts", "locale", "code"]
 const ALLOWED_ROOT_FILES := ["manifest.json", "mod.json", "preview.png", "README.md", "CHANGELOG.md", "LICENSE", "LICENSE.md", "LICENSE.txt"]
 ## Executable payloads are never accepted, regardless of signature.
 const FORBIDDEN_EXT := ["gd", "gdc", "gde", "cs", "so", "dll", "dylib", "dex", "jar", "apk", "aab", "exe", "sh", "bat", "py", "js", "wasm"]

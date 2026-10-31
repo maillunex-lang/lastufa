@@ -50,7 +50,6 @@ func reload() -> void:
 		if not DirAccess.dir_exists_absolute(root):
 			load_errors.append("%s: каталог пакета отсутствует" % row["id"])
 			continue
-		_mount_pck_if_any(row, root)
 		_load_package(str(row["id"]), root, str(row["version"]), str(row["type"]), str(row["name"]))
 	for id in Packages.activation_errors:
 		load_errors.append("%s: %s" % [id, Packages.activation_errors[id]])
@@ -60,17 +59,6 @@ func reload() -> void:
 	Log.i("registry", "loaded %d defs from %d packages (%d overrides, %d errors)" % [total, active_packages.size(), overrides.size(), load_errors.size()])
 	reloaded.emit()
 	EventBus.content_reloaded.emit()
-
-
-func _mount_pck_if_any(row: Dictionary, root: String) -> void:
-	# Only signed SYSTEM/ENGINE packages may carry .pck resource packs
-	# (enforced at install time; double-checked here).
-	if int(row.get("signed", 0)) != 1 or not ["ENGINE", "SYSTEM"].has(str(row["type"])):
-		return
-	for rel in AfFs.list_files_recursive(root):
-		if rel.get_extension() == "pck":
-			if ProjectSettings.load_resource_pack(root.path_join(rel), false):
-				Log.i("registry", "mounted resource pack %s from %s" % [rel, row["id"]])
 
 
 func _load_package(pkg_id: String, root: String, version: String, type: String, name: String) -> void:

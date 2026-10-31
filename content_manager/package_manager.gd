@@ -18,6 +18,17 @@ var activation_errors := {}
 
 func _ready() -> void:
 	_cleanup_staging()
+	_recover_failed_code()
+	write_boot_file()
+
+
+## If Bootstrap disabled a code pack that failed to start, restore the
+## previous version of that package so the next launch uses working code.
+func _recover_failed_code() -> void:
+	for sk in Bootstrap.skipped:
+		if str(sk["reason"]).begins_with("игра дважды не запустилась") and not backups(str(sk["id"])).is_empty():
+			var res := rollback(str(sk["id"]))
+			Log.w("packages", "code pack %s@%s failed to boot; rolled back: %s" % [sk["id"], sk["version"], res.get("ok")])
 
 
 func _cleanup_staging() -> void:
@@ -326,9 +337,9 @@ func install_from_staging(staging: String, manifest: Dictionary, source: String)
 	for rel in listed:
 		if str(rel).get_extension() == "pck":
 			has_pck = true
-	if has_pck and (key_id == "" or not ["ENGINE", "SYSTEM"].has(str(manifest["type"]))):
+	if has_pck and (key_id == "" or key_id.begins_with("dev_") or not ["ENGINE", "SYSTEM"].has(str(manifest["type"]))):
 		AfFs.remove_recursive(staging)
-		return _fail("ресурсные пакеты .pck разрешены только в подписанных системных обновлениях")
+		return _fail("код (.pck) разрешён только в системных обновлениях, подписанных релизным ключом")
 	if key_id == "" and str(manifest["type"]) != "MOD":
 		warnings.append("пакет не подписан")
 	# 3. dependencies (installation is allowed, activation will report problems)
@@ -461,6 +472,24 @@ func import_candidates() -> PackedStringArray:
 	return out
 
 
+# --- code packs ------------------------------------------------------------------
+
+func has_code(id: String) -> bool:
+	for f in get_manifest(id).get("files", []):
+		if str(f.get("path", "")).get_extension() == "pck":
+			return true
+	return false
+
+
+## Tells Bootstrap (next launch) which signed code packs to verify and mount.
+func write_boot_file() -> void:
+	var packs := []
+	for row in installed():
+		if int(row["enabled"]) == 1 and ["SYSTEM", "ENGINE"].has(str(row["type"])) and has_code(str(row["id"])):
+			packs.append({"id": row["id"], "dir": row["install_path"]})
+	AfFs.write_json_atomic(Bootstrap.BOOT_FILE, {"packs": packs})
+
+
 # --- helpers -----------------------------------------------------------------
 
 func _detect_prefix(entries: PackedStringArray) -> String:
@@ -491,6 +520,7 @@ func _prune_backups(id: String) -> void:
 
 
 func _changed(id: String) -> void:
+	write_boot_file()
 	packages_changed.emit()
 	EventBus.package_changed.emit(id)
 

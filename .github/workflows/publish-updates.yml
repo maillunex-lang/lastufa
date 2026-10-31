@@ -1,0 +1,153 @@
+name: Publish updates
+
+# Builds the game-code pack (+ content packages, + APK when its version changes),
+# signs everything with the release key and publishes it to GitHub Pages.
+# Players get the new code at next launch without reinstalling the APK.
+#
+# Required repository secrets:
+#   AF_SIGNING_KEY           - PEM private key matching config/trusted_keys/release_ashenfall.pem
+#   AF_ANDROID_KEYSTORE_B64  - base64 of the release keystore (alias "ashenfall")
+#   AF_ANDROID_KEYSTORE_PASS - keystore password
+# Repository settings: Pages -> Source: "GitHub Actions".
+
+on:
+  push:
+    branches: [main, master, ccr-2a6327fc-yhi5m3]
+    paths-ignore: ["documentation/**", "**.md"]
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "Канал публикации"
+        default: stable
+        type: choice
+        options: [stable, beta]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: publish-updates
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: 4.5.1
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check secrets
+        env:
+          K: ${{ secrets.AF_SIGNING_KEY }}
+        run: |
+          if [ -z "$K" ]; then echo "::error::Secret AF_SIGNING_KEY is not set (see documentation/UPDATE_SERVER.md)"; exit 1; fi
+
+      - name: Install Godot ${{ env.GODOT_VERSION }} + export templates
+        run: |
+          curl -sSL -o godot.zip https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          unzip -q godot.zip -d "$HOME/godot"
+          echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" >> "$GITHUB_ENV"
+          curl -sSL -o tpl.tpz https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          unzip -q tpl.tpz -d tpl && mv tpl/templates/* "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+          pip install cryptography
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0" "platforms;android-35" > /dev/null
+
+      - name: Compile scripts and run tests
+        run: |
+          $GODOT --headless --import >/dev/null 2>&1 || true
+          $GODOT --headless -s res://tools/check_scripts.gd
+          tests/run_tests.sh
+          tools/test_code_update.sh
+
+      - name: Versions
+        id: v
+        run: |
+          APK_VERSION=$(grep -oE '^config/version="[^"]+"' project.godot | cut -d'"' -f2)
+          APK_BUILD=$(grep -oE '^config/apk_build=[0-9]+' project.godot | cut -d= -f2)
+          BASE=$(echo "$APK_VERSION" | cut -d. -f1-2)
+          echo "apk_version=$APK_VERSION" >> "$GITHUB_OUTPUT"
+          echo "apk_build=$APK_BUILD" >> "$GITHUB_OUTPUT"
+          echo "code_version=$BASE.${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "channel=${{ github.event.inputs.channel || 'stable' }}" >> "$GITHUB_OUTPUT"
+          git log -1 --pretty=%s | head -c 300 > changelog.txt
+
+      - name: Restore update server state
+        run: |
+          mkdir -p dist
+          if git fetch -q origin update-server 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C dist
+          fi
+
+      - name: Signing key
+        env:
+          K: ${{ secrets.AF_SIGNING_KEY }}
+        run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/keys"
+          printf '%s\n' "$K" > "$RUNNER_TEMP/keys/release_signing_private.pem"
+          echo "KEY=$RUNNER_TEMP/keys/release_signing_private.pem" >> "$GITHUB_ENV"
+
+      - name: Build and publish game-code pack
+        run: |
+          ANDROID_SDK="$ANDROID_HOME" tools/build_apk.sh pack
+          python3 tools/afpkg.py build-code --pck build/game.pck \
+            --version "${{ steps.v.outputs.code_version }}" --engine "$GODOT_VERSION" \
+            --min-apk-build "${{ steps.v.outputs.apk_build }}" --changelog "$(cat changelog.txt)" \
+            --key "$KEY" --out dist --channel "${{ steps.v.outputs.channel }}"
+
+      - name: Build and publish content packages (new versions only)
+        run: |
+          for src in content_src/*/; do
+            id=$(python3 -c "import json,sys;print(json.load(open('$src/manifest.json'))['id'])")
+            ver=$(python3 -c "import json,sys;print(json.load(open('$src/manifest.json'))['version'])")
+            if [ -d "dist/packages/$id/$ver" ]; then echo "skip $id $ver (already published)"; continue; fi
+            python3 tools/afpkg.py build "$src" --key "$KEY" --out dist --channel "${{ steps.v.outputs.channel }}"
+          done
+
+      - name: Build APK when its version changed
+        env:
+          KS_B64: ${{ secrets.AF_ANDROID_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.AF_ANDROID_KEYSTORE_PASS }}
+        run: |
+          APK="dist/apk/ashenfall_ufa-${{ steps.v.outputs.apk_version }}-b${{ steps.v.outputs.apk_build }}.apk"
+          if [ -f "$APK" ] || [ -z "$KS_B64" ]; then echo "APK up to date or keystore secret missing"; exit 0; fi
+          echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/keys/release.keystore"
+          KEYSTORE="$RUNNER_TEMP/keys/release.keystore" KEYSTORE_USER=ashenfall KEYSTORE_PASS="$KS_PASS" \
+            ANDROID_SDK="$ANDROID_HOME" tools/build_apk.sh release
+          mkdir -p dist/apk && cp build/ashenfall_ufa-release.apk "$APK"
+          python3 tools/afpkg.py catalog --out dist
+
+      - name: Prune old versions
+        run: python3 tools/afpkg.py prune --keep 5 --out dist && python3 tools/afpkg.py status --out dist
+
+      - name: Save update server state (branch update-server)
+        run: |
+          cd dist
+          git init -q -b update-server
+          git config user.name "ashenfall-ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add -A
+          git commit -qm "Update server: code ${{ steps.v.outputs.code_version }} [${{ steps.v.outputs.channel }}]"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" update-server
+          rm -rf .git
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      - name: Cleanup keys
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/keys"

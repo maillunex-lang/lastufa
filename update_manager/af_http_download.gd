@@ -24,6 +24,8 @@ var _tls := false
 var _path := "/"
 var _idle := 0.0
 var _total_size := -1
+var _redirects := 0
+const MAX_REDIRECTS := 5
 
 
 func start(p_url: String, p_dest: String, p_expected_size: int = -1) -> bool:
@@ -92,6 +94,9 @@ func poll(delta: float) -> int:
 		State.REQUESTING:
 			if st == HTTPClient.STATUS_BODY or (st == HTTPClient.STATUS_CONNECTED and _client.has_response()):
 				var code := _client.get_response_code()
+				if code in [301, 302, 303, 307, 308]:
+					_follow_redirect()
+					return 0
 				var part := dest + ".part"
 				if code == 206 and bytes_done > 0:
 					_file = FileAccess.open(part, FileAccess.READ_WRITE)
@@ -139,6 +144,25 @@ func poll(delta: float) -> int:
 		if _idle > timeout_sec and state != State.DONE and state != State.FAILED:
 			_fail("таймаут")
 	return received
+
+
+func _follow_redirect() -> void:
+	var location := ""
+	for h in _client.get_response_headers():
+		if h.to_lower().begins_with("location:"):
+			location = h.substr(9).strip_edges()
+	_client.close()
+	_redirects += 1
+	if location == "" or _redirects > MAX_REDIRECTS:
+		_fail("ошибка перенаправления")
+		return
+	if location.begins_with("/"):
+		location = ("https://" if _tls else "http://") + _host + ("" if _port in [80, 443] else ":%d" % _port) + location
+	url = location
+	if not _parse_url(url) or _client.connect_to_host(_host, _port, TLSOptions.client() if _tls else null) != OK:
+		_fail("ошибка перенаправления")
+		return
+	state = State.CONNECTING
 
 
 func cancel() -> void:

@@ -162,3 +162,21 @@ func test_storage_report(t) -> void:
 	for k in ["packages", "backups", "downloads", "cache", "saves", "free"]:
 		t.ok(r.has(k), "has " + k)
 	t.ok(int(r["free"]) > 0, "free space known")
+
+
+func test_bootstrap_payload_matches_manifest(t) -> void:
+	var f := _items("X")
+	var m := TestPkg.manifest("payload.check", "2.3.4", "SYSTEM", f, {"dependencies": {"b": ">=1", "a": "^2.0.0"}})
+	t.eq(Bootstrap.signing_payload(m), AfManifest.signing_payload(m), "Bootstrap and AfManifest sign the same payload")
+
+
+func test_code_pack_needs_release_key(t) -> void:
+	var f := {"code/game.pck": PackedByteArray([71, 68, 80, 67])}
+	var m := TestPkg.manifest("game.core", "9.0.0", "SYSTEM", f)
+	TestPkg.sign(m)  # dev key
+	TestPkg.zip(t, dir.path_join("code.zip"), m, f)
+	var res := Packages.install_zip(dir.path_join("code.zip"))
+	t.ok(not res["ok"], "dev-signed code pack rejected")
+	t.ok(str(res["error"]).contains("релизным"), "reason mentions release key: %s" % res["error"])
+	t.ok(FileAccess.file_exists(Bootstrap.BOOT_FILE), "boot file written")
+	t.eq(Bootstrap.code_version, AfPaths.game_version(), "nothing mounted in tests")
