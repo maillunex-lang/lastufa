@@ -1,0 +1,9 @@
+{
+	"kind": "need",
+	"defs": [
+		{"id": "satiety", "name": "Сытость", "max": 100, "start": 80, "decay_per_hour": 4.0, "critical": 15, "damage_per_hour_at_zero": 3.0},
+		{"id": "hydration", "name": "Жажда", "max": 100, "start": 80, "decay_per_hour": 6.0, "critical": 15, "damage_per_hour_at_zero": 6.0},
+		{"id": "energy", "name": "Энергия", "max": 100, "start": 90, "decay_per_hour": 4.5, "sleep_recovery_per_hour": 12.5, "critical": 10, "damage_per_hour_at_zero": 1.0},
+		{"id": "hygiene", "name": "Гигиена", "max": 100, "start": 70, "decay_per_hour": 1.2, "critical": 10, "damage_per_hour_at_zero": 0.0}
+	]
+}

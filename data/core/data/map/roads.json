@@ -1,0 +1,20 @@
+{
+	"kind": "road",
+	"defs": [
+		{"id": "m5_west", "name": "М-5 «Урал» (запад)", "class": "federal", "points": [[54.4815, 53.4710], [54.6000, 53.7000], [54.5833, 55.3833], [54.7388, 55.9721]], "nodes": ["oktyabrsky", "tuymazy", "chishmy", "ufa"]},
+		{"id": "m5_east", "name": "М-5 «Урал» (восток)", "class": "federal", "points": [[54.7388, 55.9721], [54.8333, 56.4333], [54.99, 57.26]], "nodes": ["ufa", "iglino"]},
+		{"id": "r240", "name": "Р-240 Уфа — Оренбург", "class": "federal", "points": [[54.7388, 55.9721], [53.6300, 55.9500], [53.3617, 55.9244], [52.9500, 55.9333], [52.7667, 55.7833]], "nodes": ["ufa", "sterlitamak", "salavat", "meleuz", "kumertau"]},
+		{"id": "ishimbay_link", "name": "Стерлитамак — Ишимбай", "class": "regional", "points": [[53.6300, 55.9500], [53.4547, 56.0439], [53.3617, 55.9244]], "nodes": ["sterlitamak", "ishimbay", "salavat"]},
+		{"id": "petrochem_link", "name": "Подъезд к нефтехимкомплексу", "class": "local", "points": [[53.3617, 55.9244], [53.3950, 56.0300]], "nodes": ["salavat", "salavat_petrochem"]},
+		{"id": "ufa_birsk", "name": "Уфа — Бирск — Янаул", "class": "regional", "points": [[54.7388, 55.9721], [55.0500, 55.9667], [55.4153, 55.5306], [56.2667, 54.9333]], "nodes": ["ufa", "blagoveshchensk", "birsk", "yanaul"]},
+		{"id": "birsk_neftekamsk", "name": "Бирск — Дюртюли — Нефтекамск", "class": "regional", "points": [[55.4153, 55.5306], [55.4833, 54.8667], [56.0920, 54.2661]], "nodes": ["birsk", "dyurtyuli", "neftekamsk"]},
+		{"id": "yanaul_neftekamsk", "name": "Янаул — Нефтекамск", "class": "regional", "points": [[56.2667, 54.9333], [56.0920, 54.2661]], "nodes": ["yanaul", "neftekamsk"]},
+		{"id": "ufa_beloretsk", "name": "Р-316 Уфа — Белорецк", "class": "regional", "points": [[54.7388, 55.9721], [54.40, 56.80], [54.0500, 57.8200], [53.9667, 58.4000]], "nodes": ["ufa", "irmel_object", "beloretsk"]},
+		{"id": "beloretsk_uchaly", "name": "Белорецк — Учалы", "class": "regional", "points": [[53.9667, 58.4000], [54.3167, 59.3833]], "nodes": ["beloretsk", "uchaly"]},
+		{"id": "beloretsk_sibay", "name": "Белорецк — Сибай", "class": "regional", "points": [[53.9667, 58.4000], [53.40, 58.55], [52.7200, 58.6667]], "nodes": ["beloretsk", "sibay"]},
+		{"id": "ufa_belebey", "name": "Уфа — Давлеканово — Белебей", "class": "regional", "points": [[54.5833, 55.3833], [54.2167, 55.0333], [54.1000, 54.1167], [54.6000, 53.7000]], "nodes": ["chishmy", "davlekanovo", "belebey", "tuymazy"]},
+		{"id": "kandrykul_road", "name": "Дорога на Кандрыкуль", "class": "local", "points": [[54.6000, 53.7000], [54.4900, 54.0700]], "nodes": ["tuymazy", "kandrykul"]},
+		{"id": "pavlovka_road", "name": "Дорога на Павловку", "class": "local", "points": [[54.8333, 56.4333], [55.4300, 56.5500]], "nodes": ["iglino", "pavlovka"]},
+		{"id": "bio_road", "name": "Подъезд к НИИ", "class": "local", "points": [[55.0500, 55.9667], [55.0100, 56.1500]], "nodes": ["blagoveshchensk", "agidel_bio"]}
+	]
+}

@@ -1,0 +1,9 @@
+{
+	"id": "core",
+	"name": "ASHENFALL: UFA — ядро",
+	"type": "SYSTEM",
+	"description": "Встроенный пакет: базовые предметы, заражённые, карта Башкортостана и стартовая локация. Поставляется внутри APK.",
+	"api_version": 1,
+	"data_format": 1,
+	"author": "Ashenfall Team"
+}

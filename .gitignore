@@ -1,0 +1,15 @@
+# Godot
+.godot/
+/android/build/
+*.translation
+# Build output
+/build/
+/dist/
+*.apk
+*.aab
+*.idsig
+# Local tooling
+__pycache__/
+*.pyc
+tools/keys/release_*.pem
+tools/keys/*.keystore

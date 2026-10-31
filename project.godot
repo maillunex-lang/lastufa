@@ -1,0 +1,56 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="ASHENFALL: UFA"
+config/description="Isometric survival RPG set in post-apocalyptic Bashkortostan."
+config/version="0.1.0"
+run/main_scene="res://scenes/boot.tscn"
+config/features=PackedStringArray("4.5", "Mobile")
+config/icon="res://icon.svg"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="ashenfall_ufa"
+config/quit_on_go_back=false
+config/auto_accept_quit=false
+
+[autoload]
+
+Log="*res://core/log.gd"
+EventBus="*res://core/event_bus.gd"
+Settings="*res://core/settings.gd"
+SystemDB="*res://database/system_db.gd"
+Packages="*res://content_manager/package_manager.gd"
+Registry="*res://content_manager/content_registry.gd"
+Assets="*res://content_manager/asset_loader.gd"
+Updates="*res://update_manager/update_manager.gd"
+Clock="*res://core/game_clock.gd"
+Scheduler="*res://core/sim_scheduler.gd"
+Session="*res://core/game_session.gd"
+Saves="*res://saves/save_manager.gd"
+Perf="*res://core/perf_governor.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[physics]
+
+common/physics_ticks_per_second=30
+
+[rendering]
+
+renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="mobile"
+textures/vram_compression/import_etc2_astc=true
+occlusion_culling/use_occlusion_culling=true
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/size.mobile=2048

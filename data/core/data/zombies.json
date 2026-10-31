@@ -1,0 +1,9 @@
+{
+	"kind": "zombie",
+	"defs": [
+		{"id": "walker", "name": "Бродяга", "hp": 60, "speed_walk": 0.9, "speed_run": 1.7, "damage": 9, "attack_cooldown": 1.4, "attack_range": 1.3, "sight": 11, "fov_deg": 110, "hearing": 1.0, "smell": 2.5, "armor": 0.0, "infect_chance": 0.05, "bleed_chance": 0.25, "behavior": "shambler", "color": "#6f7a5e", "scale": 1.0, "memory_sec": 12, "loot_table": "zombie_pockets"},
+		{"id": "runner", "name": "Бегун", "hp": 45, "speed_walk": 1.3, "speed_run": 4.3, "damage": 7, "attack_cooldown": 0.9, "attack_range": 1.2, "sight": 15, "fov_deg": 140, "hearing": 1.3, "smell": 3.0, "armor": 0.0, "infect_chance": 0.06, "bleed_chance": 0.3, "behavior": "runner", "color": "#8a5a4a", "scale": 0.95, "memory_sec": 8, "loot_table": "zombie_pockets"},
+		{"id": "lurker", "name": "Затаившийся", "hp": 55, "speed_walk": 0.6, "speed_run": 3.8, "damage": 14, "attack_cooldown": 1.6, "attack_range": 1.4, "sight": 6, "fov_deg": 360, "hearing": 1.7, "smell": 4.0, "armor": 0.0, "infect_chance": 0.08, "bleed_chance": 0.45, "behavior": "lurker", "color": "#3d3f45", "scale": 0.9, "memory_sec": 20, "light_sensitivity": 1.6, "loot_table": "zombie_pockets"},
+		{"id": "riot", "name": "Омоновец", "hp": 150, "speed_walk": 0.8, "speed_run": 1.4, "damage": 13, "attack_cooldown": 1.7, "attack_range": 1.4, "sight": 10, "fov_deg": 100, "hearing": 0.7, "smell": 2.0, "armor": 0.55, "infect_chance": 0.05, "bleed_chance": 0.2, "behavior": "brute", "color": "#2f3a4a", "scale": 1.15, "memory_sec": 15, "loot_table": "zombie_police"}
+	]
+}

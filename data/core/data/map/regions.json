@@ -1,0 +1,30 @@
+{
+	"kind": "region",
+	"defs": [
+		{"id": "ufa", "name": "Уфа", "kind": "city", "lat": 54.7388, "lon": 55.9721, "population": 1140000, "danger": 0.85, "loot_table": "region_city", "location": "ufa_chernikovka", "description": "Столица республики. Северный район Черниковка — панельные кварталы между нефтезаводами и рекой Уфой."},
+		{"id": "sterlitamak", "name": "Стерлитамак", "kind": "city", "lat": 53.6300, "lon": 55.9500, "population": 280000, "danger": 0.7, "loot_table": "region_city", "description": "Химическая столица юга. Известняковые шиханы видны издалека."},
+		{"id": "salavat", "name": "Салават", "kind": "city", "lat": 53.3617, "lon": 55.9244, "population": 150000, "danger": 0.6, "loot_table": "region_city", "description": "Город нефтехимиков на Белой."},
+		{"id": "salavat_petrochem", "name": "Нефтехимический комплекс", "kind": "industrial", "lat": 53.3950, "lon": 56.0300, "population": 0, "danger": 0.45, "loot_table": "region_industrial", "description": "Факелы погасли. Цистерны, трубопроводы и тишина."},
+		{"id": "ishimbay", "name": "Ишимбай", "kind": "town", "lat": 53.4547, "lon": 56.0439, "population": 65000, "danger": 0.45, "loot_table": "region_town", "description": "Старейший нефтяной город региона."},
+		{"id": "neftekamsk", "name": "Нефтекамск", "kind": "city", "lat": 56.0920, "lon": 54.2661, "population": 125000, "danger": 0.55, "loot_table": "region_city", "description": "Северо-запад, у Камы."},
+		{"id": "oktyabrsky", "name": "Октябрьский", "kind": "city", "lat": 54.4815, "lon": 53.4710, "population": 115000, "danger": 0.55, "loot_table": "region_city", "description": "Западные ворота республики на трассе М-5."},
+		{"id": "beloretsk", "name": "Белорецк", "kind": "town", "lat": 53.9667, "lon": 58.4000, "population": 65000, "danger": 0.35, "loot_table": "region_town", "description": "Металлургический город в горах Южного Урала."},
+		{"id": "tuymazy", "name": "Туймазы", "kind": "town", "lat": 54.6000, "lon": 53.7000, "population": 67000, "danger": 0.45, "loot_table": "region_town", "description": "Город на западе, нефтепромыслы вокруг."},
+		{"id": "birsk", "name": "Бирск", "kind": "town", "lat": 55.4153, "lon": 55.5306, "population": 46000, "danger": 0.35, "loot_table": "region_town", "description": "Старый купеческий город на высоком берегу Белой."},
+		{"id": "kumertau", "name": "Кумертау", "kind": "town", "lat": 52.7667, "lon": 55.7833, "population": 60000, "danger": 0.4, "loot_table": "region_town", "description": "Юг республики, бывший угольный и авиастроительный центр."},
+		{"id": "meleuz", "name": "Мелеуз", "kind": "town", "lat": 52.9500, "lon": 55.9333, "population": 58000, "danger": 0.35, "loot_table": "region_town", "description": "Город на трассе Уфа — Оренбург."},
+		{"id": "sibay", "name": "Сибай", "kind": "town", "lat": 52.7200, "lon": 58.6667, "population": 60000, "danger": 0.3, "loot_table": "region_town", "description": "Зауралье. Карьер — одна из глубочайших ям континента."},
+		{"id": "uchaly", "name": "Учалы", "kind": "town", "lat": 54.3167, "lon": 59.3833, "population": 37000, "danger": 0.25, "loot_table": "region_town", "description": "Горняцкий город на востоке."},
+		{"id": "belebey", "name": "Белебей", "kind": "town", "lat": 54.1000, "lon": 54.1167, "population": 58000, "danger": 0.35, "loot_table": "region_town", "description": "Бугульминско-Белебеевская возвышенность."},
+		{"id": "blagoveshchensk", "name": "Благовещенск", "kind": "town", "lat": 55.0500, "lon": 55.9667, "population": 34000, "danger": 0.35, "loot_table": "region_town", "description": "Город к северу от Уфы на Белой."},
+		{"id": "dyurtyuli", "name": "Дюртюли", "kind": "town", "lat": 55.4833, "lon": 54.8667, "population": 30000, "danger": 0.3, "loot_table": "region_town", "description": "Северо-запад, низовья Белой."},
+		{"id": "yanaul", "name": "Янаул", "kind": "town", "lat": 56.2667, "lon": 54.9333, "population": 26000, "danger": 0.25, "loot_table": "region_town", "description": "Северная окраина республики."},
+		{"id": "davlekanovo", "name": "Давлеканово", "kind": "town", "lat": 54.2167, "lon": 55.0333, "population": 23000, "danger": 0.25, "loot_table": "region_town", "description": "Рядом — озеро Асылыкуль."},
+		{"id": "iglino", "name": "Иглино", "kind": "village", "lat": 54.8333, "lon": 56.4333, "population": 18000, "danger": 0.3, "loot_table": "region_village", "description": "Село на трассе М-5 к востоку от Уфы."},
+		{"id": "chishmy", "name": "Чишмы", "kind": "village", "lat": 54.5833, "lon": 55.3833, "population": 21000, "danger": 0.3, "loot_table": "region_village", "description": "Железнодорожный узел к юго-западу от Уфы."},
+		{"id": "pavlovka", "name": "Павловская ГЭС", "kind": "infrastructure", "lat": 55.4300, "lon": 56.5500, "population": 0, "danger": 0.2, "loot_table": "region_industrial", "description": "Плотина на реке Уфе. Если турбины целы — это электричество для целого поселения."},
+		{"id": "irmel_object", "name": "Объект «Иремель-4»", "kind": "military", "lat": 54.0500, "lon": 57.8200, "population": 0, "danger": 0.6, "loot_table": "region_military", "description": "Закрытый военный объект в горах. По радио оттуда до сих пор передают цифры."},
+		{"id": "agidel_bio", "name": "НИИ «Агидель-Био»", "kind": "lab", "lat": 55.0100, "lon": 56.1500, "population": 0, "danger": 0.7, "loot_table": "region_lab", "description": "Биотехнологический институт. Его эвакуировали за двое суток до первых случаев."},
+		{"id": "kandrykul", "name": "Озеро Кандрыкуль", "kind": "nature", "lat": 54.4900, "lon": 54.0700, "population": 0, "danger": 0.1, "loot_table": "region_village", "description": "Рыба, тишина, турбазы."}
+	]
+}

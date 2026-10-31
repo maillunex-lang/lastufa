@@ -1,0 +1,72 @@
+{
+	"kind": "loot_table",
+	"defs": [
+		{"id": "residential", "rolls": [1, 3], "empty_chance": 0.15, "entries": [
+			{"item": "canned_meat", "weight": 6, "min": 1, "max": 2}, {"item": "crackers", "weight": 6, "min": 1, "max": 3},
+			{"item": "bread", "weight": 3, "min": 1, "max": 1}, {"item": "water_bottle", "weight": 7, "min": 1, "max": 2},
+			{"item": "chak_chak", "weight": 2}, {"item": "honey", "weight": 1}, {"item": "kumys", "weight": 2},
+			{"item": "bandage", "weight": 4, "min": 1, "max": 2}, {"item": "painkillers", "weight": 3},
+			{"item": "kitchen_knife", "weight": 2, "quality": [0.3, 0.9]}, {"item": "cloth", "weight": 5, "min": 1, "max": 3},
+			{"item": "warm_jacket", "weight": 1, "quality": [0.4, 0.9]}, {"item": "raincoat", "weight": 1}, {"item": "electronics", "weight": 2}
+		]},
+		{"id": "kiosk", "rolls": [2, 4], "empty_chance": 0.1, "entries": [
+			{"item": "crackers", "weight": 6, "min": 1, "max": 4}, {"item": "water_bottle", "weight": 8, "min": 1, "max": 3},
+			{"item": "chak_chak", "weight": 4}, {"item": "canned_meat", "weight": 4, "min": 1, "max": 2}, {"item": "bread", "weight": 3}
+		]},
+		{"id": "car", "rolls": [0, 2], "empty_chance": 0.3, "entries": [
+			{"item": "fuel_can", "weight": 2}, {"item": "water_bottle", "weight": 4}, {"item": "tool_kit", "weight": 1},
+			{"item": "crackers", "weight": 3}, {"item": "bandage", "weight": 3}, {"item": "scrap_metal", "weight": 3, "min": 1, "max": 2},
+			{"item": "makarov", "weight": 0.4, "quality": [0.4, 0.8]}, {"item": "ammo_9x18", "weight": 1.5, "min": 4, "max": 12}
+		]},
+		{"id": "garage", "rolls": [1, 3], "empty_chance": 0.15, "entries": [
+			{"item": "crowbar", "weight": 2, "quality": [0.5, 1.0]}, {"item": "axe", "weight": 1.5, "quality": [0.4, 1.0]},
+			{"item": "scrap_metal", "weight": 6, "min": 1, "max": 4}, {"item": "wood_planks", "weight": 5, "min": 1, "max": 3},
+			{"item": "fuel_can", "weight": 2}, {"item": "tool_kit", "weight": 1.5}, {"item": "radio_parts", "weight": 1},
+			{"item": "izh_shotgun", "weight": 0.5, "quality": [0.3, 0.8]}, {"item": "ammo_12g", "weight": 2, "min": 2, "max": 8},
+			{"item": "dirty_water", "weight": 2}
+		]},
+		{"id": "pharmacy", "rolls": [2, 4], "empty_chance": 0.05, "entries": [
+			{"item": "bandage", "weight": 6, "min": 1, "max": 3}, {"item": "antiseptic", "weight": 5}, {"item": "painkillers", "weight": 5, "min": 1, "max": 2},
+			{"item": "splint", "weight": 2}, {"item": "antiviral_af7", "weight": 0.6}, {"item": "field_notes", "weight": 0.5}
+		]},
+		{"id": "police", "rolls": [1, 3], "empty_chance": 0.1, "entries": [
+			{"item": "makarov", "weight": 2, "quality": [0.5, 1.0]}, {"item": "ammo_9x18", "weight": 6, "min": 6, "max": 16},
+			{"item": "bandage", "weight": 3}, {"item": "radio_parts", "weight": 2}
+		]},
+		{"id": "zombie_pockets", "rolls": [0, 1], "empty_chance": 0.6, "entries": [
+			{"item": "crackers", "weight": 3}, {"item": "bandage", "weight": 2}, {"item": "painkillers", "weight": 1},
+			{"item": "electronics", "weight": 1}, {"item": "ammo_9x18", "weight": 0.5, "min": 2, "max": 5}
+		]},
+		{"id": "zombie_police", "rolls": [1, 2], "empty_chance": 0.2, "entries": [
+			{"item": "ammo_9x18", "weight": 4, "min": 3, "max": 10}, {"item": "bandage", "weight": 2}, {"item": "radio_parts", "weight": 1}
+		]},
+		{"id": "region_city", "rolls": [2, 5], "empty_chance": 0.05, "entries": [
+			{"item": "canned_meat", "weight": 4, "min": 1, "max": 3}, {"item": "water_bottle", "weight": 5, "min": 1, "max": 3},
+			{"item": "bandage", "weight": 3, "min": 1, "max": 2}, {"item": "painkillers", "weight": 2}, {"item": "antiseptic", "weight": 2},
+			{"item": "electronics", "weight": 3, "min": 1, "max": 3}, {"item": "ammo_9x18", "weight": 2, "min": 4, "max": 10},
+			{"item": "radio_parts", "weight": 2}, {"item": "antiviral_af7", "weight": 0.3}
+		]},
+		{"id": "region_town", "rolls": [1, 4], "empty_chance": 0.1, "entries": [
+			{"item": "canned_meat", "weight": 4}, {"item": "bread", "weight": 2}, {"item": "water_bottle", "weight": 5, "min": 1, "max": 2},
+			{"item": "bandage", "weight": 3}, {"item": "scrap_metal", "weight": 3, "min": 1, "max": 3}, {"item": "fuel_can", "weight": 1.5},
+			{"item": "ammo_12g", "weight": 2, "min": 2, "max": 6}
+		]},
+		{"id": "region_village", "rolls": [1, 3], "empty_chance": 0.15, "entries": [
+			{"item": "honey", "weight": 3}, {"item": "kumys", "weight": 3}, {"item": "bread", "weight": 2}, {"item": "dirty_water", "weight": 3},
+			{"item": "axe", "weight": 1}, {"item": "wood_planks", "weight": 4, "min": 1, "max": 4}, {"item": "ammo_12g", "weight": 2, "min": 2, "max": 6},
+			{"item": "izh_shotgun", "weight": 0.4, "quality": [0.3, 0.9]}
+		]},
+		{"id": "region_industrial", "rolls": [2, 4], "empty_chance": 0.1, "entries": [
+			{"item": "scrap_metal", "weight": 6, "min": 2, "max": 5}, {"item": "electronics", "weight": 3, "min": 1, "max": 3},
+			{"item": "fuel_can", "weight": 3}, {"item": "tool_kit", "weight": 1.5}, {"item": "dirty_water", "weight": 2}
+		]},
+		{"id": "region_military", "rolls": [2, 4], "empty_chance": 0.05, "entries": [
+			{"item": "makarov", "weight": 2}, {"item": "ammo_9x18", "weight": 5, "min": 8, "max": 20}, {"item": "ammo_12g", "weight": 3, "min": 4, "max": 10},
+			{"item": "bandage", "weight": 3, "min": 1, "max": 3}, {"item": "radio_parts", "weight": 3, "min": 1, "max": 3}, {"item": "canned_meat", "weight": 3, "min": 1, "max": 3}
+		]},
+		{"id": "region_lab", "rolls": [1, 3], "empty_chance": 0.1, "entries": [
+			{"item": "antiviral_af7", "weight": 2}, {"item": "antiseptic", "weight": 3}, {"item": "electronics", "weight": 3, "min": 1, "max": 3},
+			{"item": "field_notes", "weight": 1}
+		]}
+	]
+}

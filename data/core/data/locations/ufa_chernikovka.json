@@ -1,0 +1,74 @@
+{
+	"kind": "location",
+	"defs": [
+		{
+			"id": "ufa_chernikovka",
+			"name": "Уфа — Черниковка, двор на Первомайской",
+			"region": "ufa",
+			"size": [100, 100],
+			"ground_color": "#2b2c2a",
+			"player_spawn": [4, 14],
+			"patches": [
+				{"pos": [-2, -2], "size": [26, 14], "color": "#33402c"},
+				{"pos": [10, 20], "size": [14, 8], "color": "#34402d"},
+				{"pos": [-36, -6], "size": [16, 10], "color": "#323d2b"}
+			],
+			"buildings": [
+				{"id": "block1", "name": "Пятиэтажка №1", "pos": [-22, -26], "size": [36, 14, 11], "color": "#8d8a83", "kind": "panel"},
+				{"id": "block2", "name": "Пятиэтажка №2", "pos": [24, -26], "size": [30, 14, 11], "color": "#9a948a", "kind": "panel"},
+				{"id": "tower", "name": "Девятиэтажка", "pos": [-32, 14], "size": [12, 26, 30], "color": "#a19d95", "kind": "panel"},
+				{"id": "shop", "name": "Магазин «Агидель»", "pos": [22, 8], "size": [14, 4.5, 10], "color": "#7e6a55", "kind": "shop"},
+				{"id": "pharmacy", "name": "Аптека", "pos": [38, 24], "size": [8, 4, 8], "color": "#6f8a86", "kind": "shop"},
+				{"id": "garages", "name": "Гаражный кооператив", "pos": [10, 37], "size": [34, 3, 6], "color": "#5d5a55", "kind": "garage"},
+				{"id": "police", "name": "Опорный пункт полиции", "pos": [-24, 40], "size": [10, 4, 8], "color": "#4f5a6b", "kind": "office"},
+				{"id": "transformer", "name": "Трансформаторная будка", "pos": [6, -10], "size": [3, 3, 3], "color": "#6a6f66", "kind": "utility"}
+			],
+			"props": [
+				{"type": "car", "pos": [-6, -13], "rot": 20, "color": "#5b6b7a"},
+				{"type": "car", "pos": [12, -3], "rot": 80, "color": "#7a3b33"},
+				{"type": "car", "pos": [31, -9], "rot": 5, "color": "#c8c4b8"},
+				{"type": "bus", "pos": [-14, 3], "rot": -30, "color": "#d9c46a"},
+				{"type": "barricade", "pos": [0, 26], "rot": 0},
+				{"type": "barricade", "pos": [44, 6], "rot": 90},
+				{"type": "bench", "pos": [-2, 0], "rot": 0},
+				{"type": "swing", "pos": [4, -2], "rot": 0},
+				{"type": "tree", "pos": [-10, -4]}, {"type": "tree", "pos": [14, 22]}, {"type": "tree", "pos": [-38, -8]},
+				{"type": "tree", "pos": [40, -16]}, {"type": "tree", "pos": [-12, 24]}, {"type": "tree", "pos": [28, 30]},
+				{"type": "tree", "pos": [-44, 30]}, {"type": "tree", "pos": [44, 40]}
+			],
+			"lights": [
+				{"type": "fire_barrel", "pos": [8, 19]},
+				{"type": "fire_barrel", "pos": [-10, -8]},
+				{"type": "fire_barrel", "pos": [30, 16]}
+			],
+			"containers": [
+				{"id": "block1_e1", "name": "Пятиэтажка №1, подъезд 1 — кв. 12", "pos": [-32, -19.5], "loot_table": "residential", "search_sec": 4},
+				{"id": "block1_e3", "name": "Пятиэтажка №1, подъезд 3 — кв. 47", "pos": [-14, -19.5], "loot_table": "residential", "search_sec": 4},
+				{"id": "block2_e2", "name": "Пятиэтажка №2, подъезд 2 — кв. 8", "pos": [24, -19.5], "loot_table": "residential", "search_sec": 4},
+				{"id": "tower_desk", "name": "Девятиэтажка — комната консьержа", "pos": [-25, 10], "loot_table": "residential", "search_sec": 3},
+				{"id": "shop_back", "name": "Магазин «Агидель» — подсобка", "pos": [22, 14], "loot_table": "kiosk", "search_sec": 5},
+				{"id": "pharmacy_shelf", "name": "Аптека — витрина и склад", "pos": [38, 29], "loot_table": "pharmacy", "search_sec": 5},
+				{"id": "garage_7", "name": "Гараж №7", "pos": [0, 33], "loot_table": "garage", "search_sec": 6},
+				{"id": "garage_12", "name": "Гараж №12", "pos": [18, 33], "loot_table": "garage", "search_sec": 6},
+				{"id": "police_locker", "name": "Опорный пункт — шкаф участкового", "pos": [-24, 35], "loot_table": "police", "search_sec": 5},
+				{"id": "car_blue", "name": "Синяя «десятка»", "pos": [-6, -10.5], "loot_table": "car", "search_sec": 3},
+				{"id": "car_white", "name": "Белый универсал", "pos": [31, -6], "loot_table": "car", "search_sec": 3},
+				{"id": "marshrutka", "name": "Маршрутка №226", "pos": [-12, 6], "loot_table": "car", "search_sec": 4}
+			],
+			"zombie_spawns": [
+				{"type": "walker", "pos": [0, -6], "count": 4, "radius": 6},
+				{"type": "walker", "pos": [26, 0], "count": 3, "radius": 5},
+				{"type": "walker", "pos": [-20, -8], "count": 3, "radius": 5},
+				{"type": "walker", "pos": [14, 28], "count": 3, "radius": 5},
+				{"type": "runner", "pos": [32, 20], "count": 2, "radius": 3},
+				{"type": "lurker", "pos": [-26, 31], "count": 1, "radius": 1},
+				{"type": "lurker", "pos": [36, 33], "count": 1, "radius": 1},
+				{"type": "riot", "pos": [-20, 46], "count": 1, "radius": 1}
+			],
+			"exits": [
+				{"id": "south", "name": "Выезд на Первомайскую", "pos": [0, 47], "radius": 3},
+				{"id": "east", "name": "Проход к реке Уфе", "pos": [47, 0], "radius": 3}
+			]
+		}
+	]
+}

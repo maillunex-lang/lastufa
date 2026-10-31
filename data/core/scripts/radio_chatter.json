@@ -1,0 +1,16 @@
+{
+	"kind": "rule",
+	"defs": [
+		{"id": "radio_day_2", "on": "day_passed", "if": [{"field": "day", "op": "==", "value": 2}], "once": true, "actions": [
+			{"type": "journal", "category": "radio", "text": "Радио, 104.0 FM: «…всем, кто слышит. Пункт сбора — стадион «Нефтяник». Повторяю…» Потом — шум."}
+		]},
+		{"id": "radio_day_4", "on": "day_passed", "if": [{"field": "day", "op": "==", "value": 4}], "once": true, "actions": [
+			{"type": "journal", "category": "radio", "text": "На коротких волнах — цифры. Женский голос, ровный. «Иремель-4» продолжает передачу."},
+			{"type": "reveal_region", "region": "irmel_object", "level": 2}
+		]},
+		{"id": "first_kill", "on": "zombie_killed", "once": true, "actions": [
+			{"type": "journal", "category": "story", "text": "Первый. Он был в форме курьера. Руки до сих пор дрожат."},
+			{"type": "add_stress", "amount": 10}
+		]}
+	]
+}

@@ -1,0 +1,9 @@
+{
+	"kind": "climate",
+	"defs": [
+		{"id": "bashkortostan_winter", "season": "winter", "base_temp": -14, "daily_amp": 4, "weather": {"clear": 3, "cloudy": 4, "snow": 4, "storm": 1, "fog": 1}},
+		{"id": "bashkortostan_spring", "season": "spring", "base_temp": 5, "daily_amp": 6, "weather": {"clear": 4, "cloudy": 4, "rain": 3, "fog": 2, "snow": 1}},
+		{"id": "bashkortostan_summer", "season": "summer", "base_temp": 20, "daily_amp": 7, "weather": {"clear": 6, "cloudy": 3, "rain": 2, "storm": 1}},
+		{"id": "bashkortostan_autumn", "season": "autumn", "base_temp": 6, "daily_amp": 5, "weather": {"clear": 3, "cloudy": 5, "rain": 4, "fog": 3, "snow": 1}}
+	]
+}
