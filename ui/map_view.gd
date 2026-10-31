@@ -146,6 +146,7 @@ func _draw() -> void:
 			_draw_region_levels(px)
 		"city", "city_district":
 			_draw_city_levels(px)
+	_base_marker(px)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	_draw_labels()
 
@@ -271,6 +272,33 @@ func _draw_city_levels(px: float) -> void:
 			draw_arc(pos, rad + px * 6.0, 0, TAU, 28, AfTheme.ACCENT_SOFT, px * 2.5, true)
 		if str(p["id"]) == wm.current_place and wm.in_city(city):
 			_marker(pos, rad, px)
+
+
+func _base_marker(px: float) -> void:
+	var b := Session.base
+	if not b.exists:
+		return
+	var lat := 0.0
+	var lon := 0.0
+	if b.place_id != "":
+		if level not in ["city", "city_district"]:
+			var r := Registry.get_def("region", b.region_id)
+			lat = float(r.get("lat", 0))
+			lon = float(r.get("lon", 0))
+		else:
+			var p := Registry.get_def("place", b.place_id)
+			lat = float(p.get("lat", 0))
+			lon = float(p.get("lon", 0))
+	else:
+		if level in ["city", "city_district"]:
+			return
+		var r2 := Registry.get_def("region", b.region_id)
+		lat = float(r2.get("lat", 0))
+		lon = float(r2.get("lon", 0))
+	var c := to_map(lat, lon) + Vector2(px * 12, px * 10)
+	var s := px * 7.0
+	draw_colored_polygon(PackedVector2Array([c + Vector2(-s, 0), c + Vector2(0, -s), c + Vector2(s, 0)]), AfTheme.GOOD)
+	draw_rect(Rect2(c + Vector2(-s * 0.7, 0), Vector2(s * 1.4, s)), AfTheme.GOOD)
 
 
 func _marker(pos: Vector2, rad: float, px: float) -> void:

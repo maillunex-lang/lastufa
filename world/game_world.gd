@@ -116,6 +116,8 @@ func enter_location(loc_id: String) -> void:
 	Clock.release_pause("map")
 	Session.journal.add("location", "Локация: %s." % loc_def.get("name", loc_id))
 	EventBus.location_entered.emit(loc_id)
+	if not Session.base.hero_here():
+		Session.events.maybe_meet("place")
 
 
 ## Keeps the map position in sync with the location the hero is in.
@@ -170,7 +172,24 @@ func _clear_mode() -> void:
 	Session.player_exertion = 0.0
 
 
+var _decision_t := 0.0
+
+
+func _check_decisions(delta: float) -> void:
+	_decision_t -= delta
+	if _decision_t > 0.0:
+		return
+	_decision_t = 1.0
+	for c in ui_layer.get_children():
+		if c is AfDialog or c is AfPanel and not (c is AfMapPanel and (c as AfMapPanel).strategic):
+			return
+	var e := Session.events.immediate()
+	if not e.is_empty():
+		AfBasePanel.show_decision(ui_layer, e)
+
+
 func _process(_delta: float) -> void:
+	_check_decisions(_delta)
 	if mode == "location" and zm:
 		Session.threat_nearby = zm.hunting_count() > 0
 	if Input.is_action_just_pressed("quick_save") and Session.active:

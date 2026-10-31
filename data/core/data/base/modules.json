@@ -1,0 +1,57 @@
+{
+	"kind": "base_module",
+	"defs": [
+		{"id": "shelter", "name": "Жилые помещения", "icon": "🛏", "description": "Койки, печки-буржуйки, занавески вместо стен. Без кровати люди не остаются надолго.",
+		 "levels": [
+			{"cost": {"wood_planks": 6, "scrap_metal": 2}, "build_hours": 6, "beds": 4, "comfort": 4},
+			{"cost": {"wood_planks": 10, "scrap_metal": 6, "cloth": 4}, "build_hours": 10, "beds": 8, "comfort": 8},
+			{"cost": {"wood_planks": 16, "scrap_metal": 10, "tool_kit": 1}, "build_hours": 16, "beds": 12, "comfort": 12}]},
+		{"id": "storage", "name": "Склад", "icon": "📦", "description": "Стеллажи, замки, учёт. Больше места для припасов.",
+		 "levels": [
+			{"cost": {"wood_planks": 6}, "build_hours": 4, "capacity": 200},
+			{"cost": {"wood_planks": 10, "scrap_metal": 4}, "build_hours": 8, "capacity": 450},
+			{"cost": {"wood_planks": 14, "scrap_metal": 8}, "build_hours": 12, "capacity": 900}]},
+		{"id": "workshop", "name": "Мастерская", "icon": "🔧", "description": "Верстак и инструменты: изготовление и ремонт снаряжения, обслуживание построек.",
+		 "skill": "engineering",
+		 "levels": [
+			{"cost": {"wood_planks": 8, "scrap_metal": 6, "tool_kit": 1}, "build_hours": 8, "staff": 1},
+			{"cost": {"scrap_metal": 10, "electronics": 4}, "build_hours": 12, "staff": 2, "power": 1},
+			{"cost": {"scrap_metal": 16, "electronics": 8, "tool_kit": 1}, "build_hours": 18, "staff": 3, "power": 2}]},
+		{"id": "infirmary", "name": "Медпункт", "icon": "✚", "description": "Койки для раненых, перевязочная. Ускоряет лечение жителей и героя.",
+		 "skill": "medicine",
+		 "levels": [
+			{"cost": {"wood_planks": 6, "cloth": 6, "bandage": 2}, "build_hours": 6, "staff": 1, "heal": 1.0},
+			{"cost": {"scrap_metal": 6, "cloth": 6, "antiseptic": 2}, "build_hours": 10, "staff": 2, "power": 1, "heal": 1.8},
+			{"cost": {"scrap_metal": 10, "electronics": 4, "painkillers": 4}, "build_hours": 16, "staff": 2, "power": 2, "heal": 2.6}]},
+		{"id": "kitchen", "name": "Кухня", "icon": "🍲", "description": "Горячая еда сытнее и поднимает настроение. Повар готовит похлёбку из овощей.",
+		 "skill": "cooking",
+		 "levels": [
+			{"cost": {"scrap_metal": 6, "wood_planks": 4}, "build_hours": 5, "staff": 1, "food_bonus": 0.2, "comfort": 3},
+			{"cost": {"scrap_metal": 8, "wood_planks": 6, "tool_kit": 1}, "build_hours": 8, "staff": 2, "food_bonus": 0.35, "comfort": 5}]},
+		{"id": "garden", "name": "Огород", "icon": "🌱", "description": "Грядки во дворе. Растёт весной, летом и осенью; на третьем уровне — теплица с подогревом, работает и зимой.",
+		 "skill": "farming",
+		 "levels": [
+			{"cost": {"wood_planks": 8, "seeds": 1}, "build_hours": 6, "staff": 2, "yield": 0.12},
+			{"cost": {"wood_planks": 12, "seeds": 2, "cloth": 4}, "build_hours": 10, "staff": 3, "yield": 0.16},
+			{"cost": {"wood_planks": 10, "scrap_metal": 10, "electronics": 2}, "build_hours": 16, "staff": 3, "yield": 0.18, "power": 2, "greenhouse": true}]},
+		{"id": "water", "name": "Водосбор и фильтр", "icon": "💧", "description": "Сбор дождевой воды и фильтрация грязной. В дождь работает лучше.",
+		 "skill": "engineering",
+		 "levels": [
+			{"cost": {"scrap_metal": 4, "cloth": 4}, "build_hours": 4, "staff": 1, "yield": 0.25},
+			{"cost": {"scrap_metal": 8, "cloth": 4, "electronics": 2}, "build_hours": 8, "staff": 1, "yield": 0.45, "power": 1}]},
+		{"id": "generator", "name": "Генераторная", "icon": "⚡", "description": "Дизель-генератор: электричество для построек. Ест топливо и шумит — заражённые слышат.",
+		 "levels": [
+			{"cost": {"scrap_metal": 10, "electronics": 4, "tool_kit": 1}, "build_hours": 8, "power_output": 4, "fuel_per_day": 1, "noise": 0.15},
+			{"cost": {"scrap_metal": 14, "electronics": 6}, "build_hours": 12, "power_output": 8, "fuel_per_day": 1.5, "noise": 0.2}]},
+		{"id": "defenses", "name": "Укрепления", "icon": "🛡", "description": "Баррикады, заваренные двери, колючая проволока, вышка.",
+		 "levels": [
+			{"cost": {"wood_planks": 10, "scrap_metal": 6}, "build_hours": 8, "defense": 15},
+			{"cost": {"wood_planks": 14, "scrap_metal": 12}, "build_hours": 14, "defense": 30},
+			{"cost": {"scrap_metal": 20, "tool_kit": 1}, "build_hours": 20, "defense": 50}]},
+		{"id": "radio", "name": "Радиостанция", "icon": "📻", "description": "Слушает эфир и зовёт выживших. Чем лучше станция, тем чаще к вам приходят люди и новости.",
+		 "skill": "engineering",
+		 "levels": [
+			{"cost": {"electronics": 6, "radio_parts": 4, "scrap_metal": 4}, "build_hours": 8, "staff": 1, "power": 1, "recruit": 0.12},
+			{"cost": {"electronics": 8, "radio_parts": 6}, "build_hours": 12, "staff": 1, "power": 2, "recruit": 0.22}]}
+	]
+}

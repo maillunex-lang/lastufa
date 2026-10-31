@@ -104,12 +104,12 @@ func _build() -> void:
 	var tr := AfUI.hbox(8)
 	tr.anchor_left = 1.0
 	tr.anchor_right = 1.0
-	tr.offset_left = -560
+	tr.offset_left = -700
 	tr.offset_right = -16
 	tr.offset_top = 12
 	tr.alignment = BoxContainer.ALIGNMENT_END
 	add_child(tr)
-	for spec in [["Инвентарь", open_inventory], ["Персонаж", open_character], ["Карта", open_map], ["Меню", open_menu]]:
+	for spec in [["Убежище", open_base], ["Инвентарь", open_inventory], ["Персонаж", open_character], ["Карта", open_map], ["Меню", open_menu]]:
 		tr.add_child(AfUI.button(spec[0], spec[1], 120))
 	_fps_lbl = AfUI.label("", 13, AfTheme.TEXT_DIM)
 	_fps_lbl.anchor_left = 1.0
@@ -347,6 +347,10 @@ func open_map() -> void:
 	var p := AfMapPanel.new(false)
 	p.world = world
 	_open(p)
+
+
+func open_base() -> void:
+	_open(AfBasePanel.new())
 
 
 func open_menu() -> void:

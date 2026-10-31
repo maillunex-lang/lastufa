@@ -1,0 +1,13 @@
+{
+	"kind": "recipe",
+	"defs": [
+		{"id": "bandage", "name": "Бинты из ткани", "module": "workshop", "inputs": {"cloth": 2}, "output": "bandage", "qty": 2, "hours": 1, "target": 6},
+		{"id": "splint", "name": "Шина", "module": "workshop", "inputs": {"wood_planks": 1, "cloth": 1}, "output": "splint", "qty": 1, "hours": 1, "target": 2},
+		{"id": "crowbar", "name": "Монтировка из лома", "module": "workshop", "inputs": {"scrap_metal": 3}, "output": "crowbar", "qty": 1, "hours": 3, "target": 1},
+		{"id": "axe", "name": "Топор", "module": "workshop", "inputs": {"scrap_metal": 2, "wood_planks": 1}, "output": "axe", "qty": 1, "hours": 3, "target": 1, "min_level": 2},
+		{"id": "jacket", "name": "Тёплая куртка", "module": "workshop", "inputs": {"cloth": 6}, "output": "warm_jacket", "qty": 1, "hours": 4, "target": 1},
+		{"id": "planks", "name": "Доски из мебели", "module": "workshop", "inputs": {"scrap_metal": 1}, "output": "wood_planks", "qty": 2, "hours": 2, "target": 0},
+		{"id": "stew", "name": "Похлёбка", "module": "kitchen", "inputs": {"vegetables": 2, "water_bottle": 1}, "output": "stew", "qty": 2, "hours": 1, "target": 8},
+		{"id": "boil_water", "name": "Кипячение воды", "module": "kitchen", "inputs": {"dirty_water": 1}, "output": "water_bottle", "qty": 1, "hours": 0.5, "target": 20}
+	]
+}

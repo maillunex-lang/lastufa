@@ -97,6 +97,36 @@ func _run() -> void:
 	for c in world.ui_layer.get_children():
 		if c is AfPanel:
 			c.queue_free()
+	# --- base
+	Session.world_map.current_place = AfWorldMap.START_PLACE
+	Session.base.found(AfWorldMap.START_PLACE, "core:ufa")
+	Session.events.resolve(Session.events.pending[0], 0)
+	for i in 4:
+		Session.survivors.add(Session.survivors.generate())
+	Session.base.modules["core:shelter"] = {"level": 1, "condition": 1.0}
+	Session.base.modules["core:garden"] = {"level": 1, "condition": 0.6}
+	Session.base.storage.add("wood_planks", 12, 1.0, 1.0, true)
+	Session.base.storage.add("canned_meat", 8, 1.0, 1.0, true)
+	Session.base.storage.add("water_bottle", 10, 1.0, 1.0, true)
+	Session.base.order_build("defenses")
+	var bp := AfBasePanel.new()
+	world.ui_layer.add_child(bp)
+	await _shot("10_base_overview", 10)
+	bp._tab = "people"
+	bp._render()
+	await _shot("11_base_people", 10)
+	bp._tab = "build"
+	bp._render()
+	await _shot("12_base_build", 10)
+	bp.queue_free()
+	await get_tree().process_frame
+	var victim: Dictionary = Session.survivors.at_base()[1]
+	Session.events.queue_bitten(victim)
+	AfBasePanel.show_decision(world.ui_layer, Session.events.pending[-1])
+	await _shot("13_decision", 10)
+	for c in world.ui_layer.get_children():
+		if c is AfDialog:
+			c.queue_free()
 	Clock.start(13.0 * 60.0)
 	Session.weather.current = "clear"
 	for pid in ["hospital", "mall", "industrial"]:

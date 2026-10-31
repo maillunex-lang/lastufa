@@ -1,35 +1,411 @@
 {
 	"kind": "item",
 	"defs": [
-		{"id": "canned_meat", "name": "Тушёнка", "category": "food", "weight": 0.4, "stack": 10, "value": 6, "spoil_hours": 8760, "use": {"hunger": 35, "thirst": -4}},
-		{"id": "crackers", "name": "Сухари", "category": "food", "weight": 0.2, "stack": 10, "value": 3, "spoil_hours": 4320, "use": {"hunger": 15, "thirst": -6}},
-		{"id": "chak_chak", "name": "Чак-чак", "category": "food", "weight": 0.3, "stack": 5, "value": 6, "spoil_hours": 1440, "use": {"hunger": 22, "stress": -8}},
-		{"id": "honey", "name": "Башкирский мёд", "category": "food", "weight": 0.5, "stack": 5, "value": 10, "use": {"hunger": 18, "stress": -10, "health": 2}},
-		{"id": "bread", "name": "Хлеб", "category": "food", "weight": 0.4, "stack": 4, "value": 2, "spoil_hours": 96, "use": {"hunger": 20}},
-		{"id": "kumys", "name": "Кумыс", "category": "drink", "weight": 1.0, "stack": 3, "value": 5, "spoil_hours": 72, "use": {"thirst": 30, "hunger": 8, "stress": -5}},
-		{"id": "water_bottle", "name": "Бутылка воды", "category": "drink", "weight": 1.0, "stack": 6, "value": 4, "use": {"thirst": 40}},
-		{"id": "dirty_water", "name": "Грязная вода", "category": "drink", "weight": 1.0, "stack": 6, "value": 1, "use": {"thirst": 30, "sickness_chance": 0.35}},
-		{"id": "bandage", "name": "Бинт", "category": "medical", "weight": 0.05, "stack": 10, "value": 5, "use": {"cures": ["bleeding"], "health": 3}},
-		{"id": "antiseptic", "name": "Антисептик", "category": "medical", "weight": 0.1, "stack": 5, "value": 6, "use": {"cures": ["wound_infection"], "infection_exposure_reduce": 0.5}},
-		{"id": "painkillers", "name": "Обезболивающее", "category": "medical", "weight": 0.05, "stack": 10, "value": 6, "use": {"pain_relief_hours": 6, "stress": -5}},
-		{"id": "splint", "name": "Шина", "category": "medical", "weight": 0.3, "stack": 3, "value": 8, "use": {"cures": ["fracture"]}},
-		{"id": "antiviral_af7", "name": "Ингибитор «АФ-7»", "category": "medical", "weight": 0.05, "stack": 3, "value": 60, "description": "Экспериментальный препарат без маркировки производителя. Неизвестно, что он делает на самом деле.", "use": {"infection_delay_hours": 48, "stress": 5}},
-		{"id": "crowbar", "name": "Монтировка", "category": "weapon", "weight": 1.6, "stack": 1, "value": 12, "weapon": {"type": "melee", "damage": 24, "range": 1.9, "arc_deg": 90, "cooldown": 0.75, "stamina": 9, "noise": 5, "wear": 0.004}},
-		{"id": "axe", "name": "Топор", "category": "weapon", "weight": 1.8, "stack": 1, "value": 16, "weapon": {"type": "melee", "damage": 34, "range": 1.8, "arc_deg": 80, "cooldown": 1.0, "stamina": 13, "noise": 6, "wear": 0.006}},
-		{"id": "kitchen_knife", "name": "Кухонный нож", "category": "weapon", "weight": 0.3, "stack": 1, "value": 5, "weapon": {"type": "melee", "damage": 14, "range": 1.3, "arc_deg": 60, "cooldown": 0.45, "stamina": 5, "noise": 2, "wear": 0.012}},
-		{"id": "makarov", "name": "Пистолет Макарова", "category": "weapon", "weight": 0.73, "stack": 1, "value": 70, "weapon": {"type": "firearm", "damage": 32, "range": 28, "spread_deg": 3.5, "cooldown": 0.35, "noise": 32, "ammo": "ammo_9x18", "mag": 8, "reload_time": 1.6, "wear": 0.0025, "falloff_start": 12}},
-		{"id": "izh_shotgun", "name": "Ружьё ИЖ-27", "category": "weapon", "weight": 3.3, "stack": 1, "value": 90, "weapon": {"type": "firearm", "damage": 16, "pellets": 8, "range": 18, "spread_deg": 9, "cooldown": 0.6, "noise": 42, "ammo": "ammo_12g", "mag": 2, "reload_time": 2.4, "wear": 0.003, "falloff_start": 6}},
-		{"id": "ammo_9x18", "name": "Патроны 9×18", "category": "ammo", "weight": 0.01, "stack": 64, "value": 1},
-		{"id": "ammo_12g", "name": "Патроны 12 калибра", "category": "ammo", "weight": 0.045, "stack": 30, "value": 2},
-		{"id": "scrap_metal", "name": "Металлолом", "category": "material", "weight": 1.0, "stack": 20, "value": 2},
-		{"id": "wood_planks", "name": "Доски", "category": "material", "weight": 1.5, "stack": 20, "value": 2},
-		{"id": "electronics", "name": "Электроника", "category": "material", "weight": 0.3, "stack": 20, "value": 5},
-		{"id": "cloth", "name": "Ткань", "category": "material", "weight": 0.2, "stack": 20, "value": 1},
-		{"id": "fuel_can", "name": "Канистра бензина (5 л)", "category": "material", "weight": 4.5, "stack": 4, "value": 15},
-		{"id": "tool_kit", "name": "Набор инструментов", "category": "material", "weight": 2.0, "stack": 1, "value": 25},
-		{"id": "radio_parts", "name": "Радиодетали", "category": "material", "weight": 0.2, "stack": 20, "value": 6},
-		{"id": "warm_jacket", "name": "Тёплая куртка", "category": "clothing", "weight": 1.4, "stack": 1, "value": 14, "clothing": {"slot": "body", "insulation": 9}},
-		{"id": "raincoat", "name": "Дождевик", "category": "clothing", "weight": 0.4, "stack": 1, "value": 5, "clothing": {"slot": "body", "insulation": 3, "rain_protection": 0.8}},
-		{"id": "field_notes", "name": "Записи фельдшера", "category": "misc", "weight": 0.1, "stack": 1, "value": 0, "description": "«Укушенные не температурят первые сутки. Потом — сорок и выше. Потом перестают узнавать родных». Почерк обрывается."}
+		{
+			"id": "canned_meat",
+			"name": "Тушёнка",
+			"category": "food",
+			"weight": 0.4,
+			"stack": 10,
+			"value": 6,
+			"spoil_hours": 8760,
+			"use": {
+				"hunger": 35,
+				"thirst": -4
+			}
+		},
+		{
+			"id": "crackers",
+			"name": "Сухари",
+			"category": "food",
+			"weight": 0.2,
+			"stack": 10,
+			"value": 3,
+			"spoil_hours": 4320,
+			"use": {
+				"hunger": 15,
+				"thirst": -6
+			}
+		},
+		{
+			"id": "chak_chak",
+			"name": "Чак-чак",
+			"category": "food",
+			"weight": 0.3,
+			"stack": 5,
+			"value": 6,
+			"spoil_hours": 1440,
+			"use": {
+				"hunger": 22,
+				"stress": -8
+			}
+		},
+		{
+			"id": "honey",
+			"name": "Башкирский мёд",
+			"category": "food",
+			"weight": 0.5,
+			"stack": 5,
+			"value": 10,
+			"use": {
+				"hunger": 18,
+				"stress": -10,
+				"health": 2
+			}
+		},
+		{
+			"id": "bread",
+			"name": "Хлеб",
+			"category": "food",
+			"weight": 0.4,
+			"stack": 4,
+			"value": 2,
+			"spoil_hours": 96,
+			"use": {
+				"hunger": 20
+			}
+		},
+		{
+			"id": "kumys",
+			"name": "Кумыс",
+			"category": "drink",
+			"weight": 1.0,
+			"stack": 3,
+			"value": 5,
+			"spoil_hours": 72,
+			"use": {
+				"thirst": 30,
+				"hunger": 8,
+				"stress": -5
+			}
+		},
+		{
+			"id": "water_bottle",
+			"name": "Бутылка воды",
+			"category": "drink",
+			"weight": 1.0,
+			"stack": 6,
+			"value": 4,
+			"use": {
+				"thirst": 40
+			}
+		},
+		{
+			"id": "dirty_water",
+			"name": "Грязная вода",
+			"category": "drink",
+			"weight": 1.0,
+			"stack": 6,
+			"value": 1,
+			"use": {
+				"thirst": 30,
+				"sickness_chance": 0.35
+			}
+		},
+		{
+			"id": "bandage",
+			"name": "Бинт",
+			"category": "medical",
+			"weight": 0.05,
+			"stack": 10,
+			"value": 5,
+			"use": {
+				"cures": [
+					"bleeding"
+				],
+				"health": 3
+			}
+		},
+		{
+			"id": "antiseptic",
+			"name": "Антисептик",
+			"category": "medical",
+			"weight": 0.1,
+			"stack": 5,
+			"value": 6,
+			"use": {
+				"cures": [
+					"wound_infection"
+				],
+				"infection_exposure_reduce": 0.5
+			}
+		},
+		{
+			"id": "painkillers",
+			"name": "Обезболивающее",
+			"category": "medical",
+			"weight": 0.05,
+			"stack": 10,
+			"value": 6,
+			"use": {
+				"pain_relief_hours": 6,
+				"stress": -5
+			}
+		},
+		{
+			"id": "splint",
+			"name": "Шина",
+			"category": "medical",
+			"weight": 0.3,
+			"stack": 3,
+			"value": 8,
+			"use": {
+				"cures": [
+					"fracture"
+				]
+			}
+		},
+		{
+			"id": "antiviral_af7",
+			"name": "Ингибитор «АФ-7»",
+			"category": "medical",
+			"weight": 0.05,
+			"stack": 3,
+			"value": 60,
+			"description": "Экспериментальный препарат без маркировки производителя. Неизвестно, что он делает на самом деле.",
+			"use": {
+				"infection_delay_hours": 48,
+				"stress": 5
+			}
+		},
+		{
+			"id": "crowbar",
+			"name": "Монтировка",
+			"category": "weapon",
+			"weight": 1.6,
+			"stack": 1,
+			"value": 12,
+			"weapon": {
+				"type": "melee",
+				"damage": 24,
+				"range": 1.9,
+				"arc_deg": 90,
+				"cooldown": 0.75,
+				"stamina": 9,
+				"noise": 5,
+				"wear": 0.004
+			}
+		},
+		{
+			"id": "axe",
+			"name": "Топор",
+			"category": "weapon",
+			"weight": 1.8,
+			"stack": 1,
+			"value": 16,
+			"weapon": {
+				"type": "melee",
+				"damage": 34,
+				"range": 1.8,
+				"arc_deg": 80,
+				"cooldown": 1.0,
+				"stamina": 13,
+				"noise": 6,
+				"wear": 0.006
+			}
+		},
+		{
+			"id": "kitchen_knife",
+			"name": "Кухонный нож",
+			"category": "weapon",
+			"weight": 0.3,
+			"stack": 1,
+			"value": 5,
+			"weapon": {
+				"type": "melee",
+				"damage": 14,
+				"range": 1.3,
+				"arc_deg": 60,
+				"cooldown": 0.45,
+				"stamina": 5,
+				"noise": 2,
+				"wear": 0.012
+			}
+		},
+		{
+			"id": "makarov",
+			"name": "Пистолет Макарова",
+			"category": "weapon",
+			"weight": 0.73,
+			"stack": 1,
+			"value": 70,
+			"weapon": {
+				"type": "firearm",
+				"damage": 32,
+				"range": 28,
+				"spread_deg": 3.5,
+				"cooldown": 0.35,
+				"noise": 32,
+				"ammo": "ammo_9x18",
+				"mag": 8,
+				"reload_time": 1.6,
+				"wear": 0.0025,
+				"falloff_start": 12
+			}
+		},
+		{
+			"id": "izh_shotgun",
+			"name": "Ружьё ИЖ-27",
+			"category": "weapon",
+			"weight": 3.3,
+			"stack": 1,
+			"value": 90,
+			"weapon": {
+				"type": "firearm",
+				"damage": 16,
+				"pellets": 8,
+				"range": 18,
+				"spread_deg": 9,
+				"cooldown": 0.6,
+				"noise": 42,
+				"ammo": "ammo_12g",
+				"mag": 2,
+				"reload_time": 2.4,
+				"wear": 0.003,
+				"falloff_start": 6
+			}
+		},
+		{
+			"id": "ammo_9x18",
+			"name": "Патроны 9×18",
+			"category": "ammo",
+			"weight": 0.01,
+			"stack": 64,
+			"value": 1
+		},
+		{
+			"id": "ammo_12g",
+			"name": "Патроны 12 калибра",
+			"category": "ammo",
+			"weight": 0.045,
+			"stack": 30,
+			"value": 2
+		},
+		{
+			"id": "scrap_metal",
+			"name": "Металлолом",
+			"category": "material",
+			"weight": 1.0,
+			"stack": 20,
+			"value": 2
+		},
+		{
+			"id": "wood_planks",
+			"name": "Доски",
+			"category": "material",
+			"weight": 1.5,
+			"stack": 20,
+			"value": 2
+		},
+		{
+			"id": "electronics",
+			"name": "Электроника",
+			"category": "material",
+			"weight": 0.3,
+			"stack": 20,
+			"value": 5
+		},
+		{
+			"id": "cloth",
+			"name": "Ткань",
+			"category": "material",
+			"weight": 0.2,
+			"stack": 20,
+			"value": 1
+		},
+		{
+			"id": "fuel_can",
+			"name": "Канистра бензина (5 л)",
+			"category": "material",
+			"weight": 4.5,
+			"stack": 4,
+			"value": 15
+		},
+		{
+			"id": "tool_kit",
+			"name": "Набор инструментов",
+			"category": "material",
+			"weight": 2.0,
+			"stack": 1,
+			"value": 25
+		},
+		{
+			"id": "radio_parts",
+			"name": "Радиодетали",
+			"category": "material",
+			"weight": 0.2,
+			"stack": 20,
+			"value": 6
+		},
+		{
+			"id": "warm_jacket",
+			"name": "Тёплая куртка",
+			"category": "clothing",
+			"weight": 1.4,
+			"stack": 1,
+			"value": 14,
+			"clothing": {
+				"slot": "body",
+				"insulation": 9
+			}
+		},
+		{
+			"id": "raincoat",
+			"name": "Дождевик",
+			"category": "clothing",
+			"weight": 0.4,
+			"stack": 1,
+			"value": 5,
+			"clothing": {
+				"slot": "body",
+				"insulation": 3,
+				"rain_protection": 0.8
+			}
+		},
+		{
+			"id": "field_notes",
+			"name": "Записи фельдшера",
+			"category": "misc",
+			"weight": 0.1,
+			"stack": 1,
+			"value": 0,
+			"description": "«Укушенные не температурят первые сутки. Потом — сорок и выше. Потом перестают узнавать родных». Почерк обрывается."
+		},
+		{
+			"id": "vegetables",
+			"name": "Овощи",
+			"category": "food",
+			"weight": 0.5,
+			"stack": 20,
+			"value": 2,
+			"spoil_hours": 240,
+			"use": {
+				"hunger": 12,
+				"thirst": 2
+			}
+		},
+		{
+			"id": "stew",
+			"name": "Похлёбка",
+			"category": "food",
+			"weight": 0.6,
+			"stack": 10,
+			"value": 4,
+			"spoil_hours": 72,
+			"use": {
+				"hunger": 40,
+				"thirst": 10,
+				"stress": -6
+			}
+		},
+		{
+			"id": "seeds",
+			"name": "Семена",
+			"category": "material",
+			"weight": 0.1,
+			"stack": 20,
+			"value": 8,
+			"description": "Картофель, свёкла, морковь, лук. Для огорода."
+		}
 	]
 }

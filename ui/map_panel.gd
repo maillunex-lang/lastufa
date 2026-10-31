@@ -19,6 +19,7 @@ func _init(p_strategic: bool = false) -> void:
 	if strategic:
 		header.get_child(header.get_child_count() - 1).queue_free()
 		header.add_child(AfUI.button("Персонаж", func(): get_parent().add_child(AfCharacterPanel.new()), 140))
+		header.add_child(AfUI.button("Убежище", func(): get_parent().add_child(AfBasePanel.new()), 140))
 		header.add_child(AfUI.button("Инвентарь", func(): get_parent().add_child(AfInventoryPanel.new()), 140))
 		header.add_child(AfUI.button("Меню", func():
 			var m := AfGameMenu.new()
@@ -174,6 +175,7 @@ func _card_region(id: String) -> void:
 			_card.add_child(_action("Войти в локацию", func(): _enter_location(str(r["location"])), in_location, true))
 		elif r.has("location"):
 			_card.add_child(AfUI.label("Детальная локация не установлена (нужен пакет «%s»)." % str(r["location"]).get_slice(":", 0), 14, AfTheme.WARN, true))
+		_base_actions("", id, in_location)
 		_card.add_child(_action("Обыскать окрестности (3 ч)", _do_search, in_location))
 		_card.add_child(_action("Отдохнуть (сон 8 ч)", _do_rest, in_location))
 	else:
@@ -222,12 +224,31 @@ func _card_place(id: String) -> void:
 	if id == wm.current_place:
 		_card.add_child(AfUI.label("Вы здесь.", 16, AfTheme.GOOD))
 		_card.add_child(_action("Войти", func(): _enter_place(id), in_location, true))
+		_base_actions(id, wm.current_region, in_location)
 	else:
 		var minutes := wm.walk_minutes(id)
 		_card.add_child(AfUI.label("Путь пешком: ~%d мин (%s)" % [int(minutes), "от въезда в город" if wm.current_place == "" else "от «%s»" % Registry.display_name("place", wm.current_place)], 15, AfTheme.TEXT, true))
 		_card.add_child(_action("Идти сюда", _do_walk.bind(id), in_location, true))
 	if in_location:
 		_card.add_child(AfUI.label("Сначала выйдите из текущей локации через выход.", 13, AfTheme.TEXT_DIM, true))
+
+
+## Base: found it here, or open it when you're at it.
+func _base_actions(place: String, region: String, in_location: bool) -> void:
+	var b := Session.base
+	if b.exists and b.place_id == place and b.region_id == region:
+		_card.add_child(AfUI.label("Здесь ваше убежище.", 16, AfTheme.ACCENT_SOFT))
+		_card.add_child(AfUI.button("Открыть убежище", func(): get_parent().add_child(AfBasePanel.new())))
+	elif not b.exists:
+		var city := str(Registry.get_def("region", region).get("city", ""))
+		if place == "" and city != "":
+			return  # in a city the base is founded at a concrete place
+		_card.add_child(_action("Основать убежище здесь", func():
+			AfDialog.show_in(get_parent(), "Основать убежище?", "Здесь будет ваш дом: склад, постройки, люди. Перенести его потом будет непросто.",
+				[["Отмена", Callable()], ["Основать", func():
+					b.found(place, region)
+					_refresh_card()
+					_view.queue_redraw()]]), false))
 
 
 func _action(text: String, cb: Callable, blocked: bool, accent: bool = false) -> Button:
@@ -270,6 +291,7 @@ func _do_travel(id: String) -> void:
 
 func _do_search() -> void:
 	_after_action("Обыск окрестностей", Session.world_map.search_area())
+	Session.events.maybe_meet("search")
 
 
 func _do_rest() -> void:

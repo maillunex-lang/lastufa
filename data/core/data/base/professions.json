@@ -1,0 +1,23 @@
+{
+	"kind": "profession",
+	"defs": [
+		{"id": "doctor", "name": "Врач", "skills": {"medicine": 7}, "weight": 1},
+		{"id": "paramedic", "name": "Фельдшер", "skills": {"medicine": 6, "scavenging": 2}, "weight": 2},
+		{"id": "builder", "name": "Строитель", "skills": {"building": 7, "engineering": 2}, "weight": 3},
+		{"id": "welder", "name": "Сварщик", "skills": {"engineering": 6, "building": 4}, "weight": 2},
+		{"id": "electrician", "name": "Электрик", "skills": {"engineering": 7}, "weight": 2},
+		{"id": "oilman", "name": "Нефтяник", "skills": {"engineering": 5, "building": 3}, "weight": 2},
+		{"id": "farmer", "name": "Фермер", "skills": {"farming": 7, "building": 2}, "weight": 2},
+		{"id": "beekeeper", "name": "Пчеловод", "skills": {"farming": 6, "scavenging": 2}, "weight": 1},
+		{"id": "cook", "name": "Повар", "skills": {"cooking": 7}, "weight": 2},
+		{"id": "police", "name": "Полицейский", "skills": {"combat": 6, "scavenging": 2}, "weight": 2},
+		{"id": "soldier", "name": "Контрактник", "skills": {"combat": 7, "building": 2}, "weight": 1},
+		{"id": "hunter", "name": "Охотник", "skills": {"combat": 4, "scavenging": 6}, "weight": 2},
+		{"id": "driver", "name": "Водитель", "skills": {"scavenging": 5, "engineering": 3}, "weight": 3},
+		{"id": "teacher", "name": "Учитель", "skills": {"medicine": 1, "cooking": 2}, "morale_aura": 3, "weight": 2},
+		{"id": "student", "name": "Студент", "skills": {"scavenging": 3, "engineering": 2}, "weight": 3},
+		{"id": "pensioner", "name": "Пенсионер", "skills": {"farming": 5, "cooking": 4}, "weight": 2},
+		{"id": "seller", "name": "Продавец", "skills": {"scavenging": 4, "cooking": 3}, "weight": 3},
+		{"id": "programmer", "name": "Программист", "skills": {"engineering": 4}, "weight": 1}
+	]
+}

@@ -26,6 +26,11 @@ const SCHEMAS := {
 	"district": ["name", "center", "polygons"],
 	"city_district": ["name", "city", "polygons"],
 	"place": ["name", "type", "city", "lat", "lon"],
+	"base_module": ["name", "levels"],
+	"profession": ["name", "skills"],
+	"trait": ["name"],
+	"name_pool": ["first", "last"],
+	"recipe": ["module", "inputs", "output"],
 }
 
 var _defs := {}            # kind -> { full_id -> def }

@@ -43,11 +43,14 @@ func _build(p_title: String, text: String, buttons: Array, lines: Array) -> void
 		var sc := AfUI.scroll(list)
 		sc.custom_minimum_size = Vector2(580, mini(320, 28 * lines.size() + 10))
 		_box.add_child(sc)
-	var row := AfUI.hbox(10)
-	row.alignment = BoxContainer.ALIGNMENT_END
-	_box.add_child(row)
 	if buttons.is_empty():
 		buttons = [["Понятно", Callable()]]
+	# 3+ options = a decision: stacked, none highlighted (no "right answer" hint)
+	var decision := buttons.size() >= 3
+	var row: BoxContainer = AfUI.vbox(8) if decision else AfUI.hbox(10)
+	if not decision:
+		(row as HBoxContainer).alignment = BoxContainer.ALIGNMENT_END
+	_box.add_child(row)
 	for i in buttons.size():
 		var spec: Array = buttons[i]
 		var cb: Callable = spec[1] if spec.size() > 1 else Callable()
@@ -55,7 +58,10 @@ func _build(p_title: String, text: String, buttons: Array, lines: Array) -> void
 			queue_free()
 			if cb.is_valid():
 				cb.call()
-		row.add_child(AfUI.accent_button(spec[0], handler, 160) if i == buttons.size() - 1 else AfUI.button(spec[0], handler, 160))
+		if decision:
+			row.add_child(AfUI.button(spec[0], handler))
+		else:
+			row.add_child(AfUI.accent_button(spec[0], handler, 160) if i == buttons.size() - 1 else AfUI.button(spec[0], handler, 160))
 
 
 func _enter_tree() -> void:

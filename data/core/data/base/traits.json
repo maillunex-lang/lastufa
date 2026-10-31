@@ -1,0 +1,19 @@
+{
+	"kind": "trait",
+	"defs": [
+		{"id": "hardworking", "name": "Трудолюбивый", "work": 1.2},
+		{"id": "lazy", "name": "Ленивый", "work": 0.8},
+		{"id": "brave", "name": "Храбрый", "combat": 2, "approves": ["harsh"]},
+		{"id": "coward", "name": "Трусливый", "combat": -2, "morale": -4},
+		{"id": "optimist", "name": "Оптимист", "morale": 10},
+		{"id": "pessimist", "name": "Пессимист", "morale": -8},
+		{"id": "pragmatic", "name": "Прагматик", "approves": ["harsh"], "disapproves": ["kind"]},
+		{"id": "compassionate", "name": "Сострадательный", "approves": ["kind"], "disapproves": ["harsh"]},
+		{"id": "glutton", "name": "Обжора", "appetite": 1.3},
+		{"id": "frugal", "name": "Неприхотливый", "appetite": 0.8},
+		{"id": "hothead", "name": "Вспыльчивый", "quarrel": 2.0},
+		{"id": "peacemaker", "name": "Миротворец", "quarrel": 0.3, "relation_bonus": 1.5},
+		{"id": "religious", "name": "Верующий", "morale": 4, "approves": ["kind"]},
+		{"id": "loner", "name": "Одиночка", "relation_bonus": 0.5, "morale": -2}
+	]
+}

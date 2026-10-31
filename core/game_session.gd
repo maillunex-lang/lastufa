@@ -14,6 +14,9 @@ var locations := AfLocationStates.new()
 var rules := AfRuleEngine.new()
 ## Difficulty and enabled needs of the current playthrough.
 var config := AfGameConfig.new()
+var survivors := AfSurvivors.new()
+var base := AfBase.new()
+var events := AfBaseEvents.new()
 
 ## Environment inputs written by the 3D scene each frame.
 var threat_nearby := false
@@ -23,7 +26,7 @@ const NEW_GAME_START_MINUTES := 6.0 * 60.0 + 30.0
 
 
 func persistables() -> Array:
-	return [Clock, config, player, world_map, weather, journal, locations, rules]
+	return [Clock, config, player, world_map, weather, journal, locations, rules, survivors, base, events]
 
 
 ## params: {difficulty: easy|normal|hard|nightmare, hunger: bool, thirst: bool}
@@ -38,6 +41,9 @@ func new_game(params: Dictionary = {}) -> void:
 	journal.clear()
 	locations.clear()
 	rules.clear()
+	survivors.clear()
+	base.clear()
+	events.clear()
 	journal.add("story", "14 сентября. Третий день без связи. Утром соседка с пятого этажа укусила мужа. К обеду весь двор кричал. Надо выбираться из Черниковки.")
 	_begin()
 
@@ -80,6 +86,7 @@ func _register_tasks() -> void:
 	Scheduler.register("survival", Scheduler.Tier.LOCAL, 2.0, _tick_survival, 30.0)
 	Scheduler.register("inventory_spoilage", Scheduler.Tier.LOCAL, 30.0, func(dt): player.inventory.simulate(dt), 240.0)
 	Scheduler.register("weather", Scheduler.Tier.REGIONAL, 60.0, func(dt): weather.simulate(dt), 120.0)
+	Scheduler.register("base", Scheduler.Tier.REGIONAL, 60.0, func(dt): base.simulate(dt), 240.0)
 	Scheduler.register("zombie_migration", Scheduler.Tier.STRATEGIC, 360.0, func(dt): world_map.simulate(dt), 1440.0)
 	Scheduler.register("autosave", Scheduler.Tier.LOCAL, float(Settings.get_value("game/autosave_minutes")), _autosave_tick, 100000.0)
 
