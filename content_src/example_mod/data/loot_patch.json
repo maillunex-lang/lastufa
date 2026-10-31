@@ -1,0 +1,6 @@
+{
+	"kind": "loot_table",
+	"defs": [
+		{"id": "core:kiosk", "patch": true, "rolls": [2, 5]}
+	]
+}

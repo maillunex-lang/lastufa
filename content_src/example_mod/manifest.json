@@ -1,0 +1,10 @@
+{
+	"id": "example.echpochmak",
+	"name": "Пример мода: Эчпочмак",
+	"type": "MOD",
+	"version": "1.0.0",
+	"min_game_version": "0.1.0",
+	"api_version": 1,
+	"author": "Modder",
+	"description": "Минимальный пример мода: новый предмет, правка таблицы лута и правило-скрипт."
+}

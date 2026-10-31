@@ -1,0 +1,9 @@
+{
+	"kind": "rule",
+	"defs": [
+		{"id": "grandma_gift", "on": "day_passed", "if": [{"field": "day", "op": "==", "value": 3}], "once": true, "actions": [
+			{"type": "journal", "category": "mod", "text": "У подъезда — узелок. Внутри три эчпочмака и записка: «Кушай, сынок»."},
+			{"type": "give_item", "item": "echpochmak", "qty": 3}
+		]}
+	]
+}
